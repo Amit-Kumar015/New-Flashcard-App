@@ -1,0 +1,218 @@
+import FilterModal from '@/components/FilterModal';
+import Flashcard from '@/components/Flashcard'
+import axios from 'axios'
+import { SlidersHorizontal } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+
+
+function AllCards() {
+  const url = import.meta.env.VITE_API_URL
+  const token = localStorage.getItem('token')
+  const [cards, setCards] = useState([])
+  const [tag, settag] = useState([])
+  const [deck, setDeck] = useState([])
+  const [errorMessage, setErrorMessage] = useState('')
+  const [filter, setFilter] = useState(false)
+  const [edit, setEdit] = useState(false)
+  const [detail, setDetail] = useState(false)
+  const [filterLevel, setFilterLevel] = useState("")
+  const [filterTag, setFilterTag] = useState("")
+  const [filterDeck, setFilterDeck] = useState("")
+
+
+  useEffect(() => {
+    try {
+      const getTag = async () => {
+        const response = await axios.get(`${url}/flashcard/tag`, {
+          headers: {
+            Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODk0NGYzZDU0MGM0YTc0YjYzNTRmYWQiLCJpYXQiOjE3NTQ1NTAwNzcsImV4cCI6MTc1NTQxNDA3N30.B20etyT0kMZc8zzLpgoCo0lkyE22r3naPDjD6_HbHMo"
+          }
+        })
+
+        settag(response.data?.allTag)
+      }
+      getTag()
+    } catch (error) {
+      setErrorMessage(error.response?.data?.error || "Fetching tags failed")
+
+      if (error.response) {
+        console.log('Status:', error.response.status);
+        console.log('Message:', error.response.data.error);
+      }
+      else if (error.request) {
+        console.log('No response received:', error.request);
+      }
+      else {
+        console.log('Error:', error.message);
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    try {
+      const getDecks = async () => {
+        const response = await axios.get(`${url}/flashcard/decks`, {
+          headers: {
+            Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODk0NGYzZDU0MGM0YTc0YjYzNTRmYWQiLCJpYXQiOjE3NTQ1NTAwNzcsImV4cCI6MTc1NTQxNDA3N30.B20etyT0kMZc8zzLpgoCo0lkyE22r3naPDjD6_HbHMo"
+          }
+        })
+
+        setDeck(response.data?.allDecks)
+      }
+      getDecks()
+    } catch (error) {
+      setErrorMessage(error.response?.data?.error || "Fetching decks failed")
+
+      if (error.response) {
+        console.log('Status:', error.response.status);
+        console.log('Message:', error.response.data.error);
+      }
+      else if (error.request) {
+        console.log('No response received:', error.request);
+      }
+      else {
+        console.log('Error:', error.message);
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchCards()
+  }, [])
+
+  const fetchCards = async () => {
+    setErrorMessage('')
+    try {
+      const response = await axios.get(`${url}/flashcard`, {
+        headers: {
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODk0NGYzZDU0MGM0YTc0YjYzNTRmYWQiLCJpYXQiOjE3NTQ1NTAwNzcsImV4cCI6MTc1NTQxNDA3N30.B20etyT0kMZc8zzLpgoCo0lkyE22r3naPDjD6_HbHMo"
+        }
+      })
+
+      console.log(response);
+      console.log(response.data);
+
+      if (response?.data.length == 0) {
+        console.log('No cards found');
+        alert("no cards found")
+      }
+      console.log("actual data: ", response?.data?.data);
+
+      setCards(response?.data?.data)
+
+      alert('cards fetched successfully')
+    }
+    catch (error) {
+      setErrorMessage(error.response?.data?.error || "Fetching cards failed")
+
+      if (error.response) {
+        console.log('Status:', error.response.status);
+        console.log('Message:', error.response.data.error);
+      }
+      else if (error.request) {
+        console.log('No response received:', error.request);
+      }
+      else {
+        console.log('Error:', error.message);
+      }
+    }
+  }
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await axios.get(`${url}/flashcard/filter`, {
+        params: {
+          level: filterLevel.replace("Level ", ""),
+          tag: filterTag,
+          deck: filterDeck
+        },
+        headers: {
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODk0NGYzZDU0MGM0YTc0YjYzNTRmYWQiLCJpYXQiOjE3NTQ1NTAwNzcsImV4cCI6MTc1NTQxNDA3N30.B20etyT0kMZc8zzLpgoCo0lkyE22r3naPDjD6_HbHMo"
+        }
+      })
+
+      setCards(response.data?.cards)
+    } catch (error) {
+      setErrorMessage(error.response?.data?.error || "Fetching cards failed")
+
+      if (error.response) {
+        console.log('Status:', error.response.status);
+        console.log('Message:', error.response.data.error);
+      }
+      else if (error.request) {
+        console.log('No response received:', error.request);
+      }
+      else {
+        console.log('Error:', error.message);
+      }
+    }
+    setFilter(false)
+  }
+
+  const handleReset = () => {
+    setFilterLevel("")
+    setFilterTag("")
+    setFilterDeck("")
+  }
+
+  const onDelete = async (id) => {
+    axios.delete(`${url}/flashcard/${id}`, {
+      headers: {
+        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODk0NGYzZDU0MGM0YTc0YjYzNTRmYWQiLCJpYXQiOjE3NTQ1NTAwNzcsImV4cCI6MTc1NTQxNDA3N30.B20etyT0kMZc8zzLpgoCo0lkyE22r3naPDjD6_HbHMo"
+      }
+    }).then((response) => {
+      fetchCards()
+      console.log("card deleted: ", response);
+      alert("card deleted")
+    }).catch((err) => {
+      console.log("error deleting card: ", err);
+    })
+  }
+
+  return (
+    <div className=''>
+      <div className='h-16'>
+        <div className="h-16 flex justify-end items-center px-4">
+          <button
+            className="bg-gray-500 text-white px-4 py-2 rounded-lg flex justify-center items-center hover:bg-gray-600 transition"
+            onClick={() => setFilter(true)}
+          >
+            <SlidersHorizontal className='w-4 h-4 mr-2' />
+            Filter
+          </button>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        {cards.map((card) => (
+          <Flashcard
+            key={card._id}
+            question={card.question}
+            level={card.level}
+            onDelete={() => onDelete(card._id)}
+            onDetail={() => console.log("card detail")}
+            onEdit={() => console.log("card edited")}
+          />
+        ))}
+      </div>
+      {filter &&
+        <FilterModal
+          filterLevel={filterLevel}
+          setFilterLevel={setFilterLevel}
+          filterTag={filterTag}
+          setFilterTag={setFilterTag}
+          filterDeck={filterDeck}
+          setFilterDeck={setFilterDeck}
+          tag={tag}
+          deck={deck}
+          setFilter={setFilter}
+          handleReset={handleReset}
+          handleSubmit={handleSubmit}
+        />
+      }
+    </div>
+  )
+}
+
+export default AllCards
