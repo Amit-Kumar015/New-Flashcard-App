@@ -16,7 +16,7 @@ export default function Flashcard({
         if(level == 1){
             return "bg-red-100 text-red-800 hover:bg-red-200"
         }
-        else if(level > 1 && level <= 3){
+        else if(level == 2 || level == 3){
             return "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
         }
         else{

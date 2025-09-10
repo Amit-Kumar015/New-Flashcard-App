@@ -26,6 +26,10 @@ function App() {
   ]
 
   const navigate = useNavigate()
+  // for testing setting token manually
+  axios.defaults.headers.common['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODk0NGYzZDU0MGM0YTc0YjYzNTRmYWQiLCJpYXQiOjE3NTc0OTQ0MTMsImV4cCI6MTc1ODM1ODQxM30.AkR99OQ8p9pn_YxZvx8slhaC6E9Ew_6D_uJWun2Pryw'
+
+
   // working
   // const authStatus = useSelector((state) => state.auth.status)
   // const [showLogin, setShowLogin] = useState(true);

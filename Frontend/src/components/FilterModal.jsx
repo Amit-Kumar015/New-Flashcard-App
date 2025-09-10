@@ -26,7 +26,6 @@ function FilterModal({
     <div className="fixed inset-0 flex backdrop-blur-xs items-center justify-center z-20">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
 
-        {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Filter className="h-5 w-5 text-primary" />
@@ -42,12 +41,10 @@ function FilterModal({
           </Button>
         </div>
 
-        {/* Form */}
         <div className="my-5">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
 
-              {/* Level */}
               <div className="space-y-2">
                 <label htmlFor="level" className="text-sm font-medium text-gray-700">
                   Level
@@ -66,7 +63,6 @@ function FilterModal({
                 </Select>
               </div>
 
-              {/* Tag */}
               <div className="space-y-2">
                 <label htmlFor="tag" className="text-sm font-medium text-gray-700">
                   Tag
@@ -85,7 +81,6 @@ function FilterModal({
                 </Select>
               </div>
 
-              {/* Deck */}
               <div className="space-y-2">
                 <label htmlFor="deck" className="text-sm font-medium text-gray-700">
                   Deck
@@ -105,7 +100,6 @@ function FilterModal({
               </div>
             </div>
 
-            {/* Buttons */}
             <div className="flex gap-3 pt-4">
               <Button
                 type="button"

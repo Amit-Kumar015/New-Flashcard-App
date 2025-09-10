@@ -82,7 +82,8 @@ const getAllCards = async (req, res) => {
                     tag: 1,
                     deck: 1,
                     hint: 1,
-                    reviewDate: 1
+                    reviewDate: 1,
+                    createdAt: 1
                 }
             }
         ])
