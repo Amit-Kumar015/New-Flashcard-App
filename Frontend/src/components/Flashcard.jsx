@@ -7,6 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 export default function Flashcard({
     question,
     level,
+    Click,
     onDetail,
     onEdit,
     onDelete
@@ -25,15 +26,13 @@ export default function Flashcard({
     }
     
     return (
-        <Card className="w-full h-48 relative hover:shadow-lg transition-shadow duration-200">
-            {/* Level Badge - Top Left */}
+        <Card className="w-full h-48 relative hover:shadow-lg transition-shadow duration-200" onClick={Click}>
             <div className="absolute top-4 left-4 z-10">
                 <Badge variant="secondary" className={getLevelColor(level)}>
                     {level}
                 </Badge>
             </div>
 
-            {/* Three Dots Menu - Top Right */}
             <div className="absolute top-4 right-4 z-10">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -43,15 +42,26 @@ export default function Flashcard({
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={onDetail}>
+                        <DropdownMenuItem onClick={(e) => {
+                            e.stopPropagation()
+                            onDetail()
+                        }}>
                             <Eye className="mr-2 h-4 w-4" />
                             Detail
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={onEdit}>
+                        <DropdownMenuItem onClick={(e) => {
+                            e.stopPropagation()
+                            onEdit()
+                        }}>
                             <Edit className="mr-2 h-4 w-4" />
                             Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={onDelete} className="text-red-600">
+                        <DropdownMenuItem 
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                onDelete()
+                            }} 
+                            className="text-red-600">
                             <Trash2 className="mr-2 h-4 w-4" />
                             Delete
                         </DropdownMenuItem>
@@ -59,7 +69,6 @@ export default function Flashcard({
                 </DropdownMenu>
             </div>
 
-            {/* Question Content - Center */}
             <CardContent className="flex items-center justify-center h-full p-6">
                 <p className="text-center text-lg font-medium text-gray-800 leading-relaxed">{question}</p>
             </CardContent>

@@ -1,6 +1,8 @@
 import { DetailModal } from '@/components/DetailModal';
+import EditModal from '@/components/EditModal';
 import FilterModal from '@/components/FilterModal';
 import Flashcard from '@/components/Flashcard'
+import { PracticeCard } from '@/components/PracticeCard';
 import axios from 'axios'
 import { SlidersHorizontal, RefreshCcwIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
@@ -20,6 +22,7 @@ function AllCards() {
   const [filterLevel, setFilterLevel] = useState("")
   const [filterTag, setFilterTag] = useState("")
   const [filterDeck, setFilterDeck] = useState("")
+  const [showCard, setShowCard]  =useState(false)
 
 
   useEffect(() => {
@@ -155,10 +158,45 @@ function AllCards() {
     })
   }
 
+  const onSave = async (id, updateCard) => {
+    try {
+      const response = await axios.patch(`${url}/flashcard/${id}`, {
+        newQuestion: updateCard.question, 
+        newAnswer: updateCard.answer,
+        newLevel: updateCard.level, 
+        newTag: updateCard.tag, 
+        newDeck: updateCard.deck, 
+        newHint: updateCard.hint
+      })
+      
+      alert("card updated successfully")
+      console.log("card updated successfully", response.data);
+    } catch (error) {
+      console.log("error while updating card: ", error);      
+    }
+  }
+
   const handleResetCards = () => {
     const localStorageCards = localStorage.getItem('Cards')
     if(localStorageCards){
       setCards(JSON.parse(localStorageCards))
+    }
+  }
+
+  const onAnswer = async (flashcard, isCorrect) => {
+    try {
+      const id = flashcard._id
+      const level = flashcard.level
+
+      await axios.patch(`${url}/flashcard/${id}`, {
+        newLevel: isCorrect ? level+1 : level-1
+      })
+      .then((res) => {
+        alert("level updated")
+        console.log(res.data);
+      })
+    } catch (error) {
+      console.error("error while updating level", error);
     }
   }
 
@@ -184,6 +222,10 @@ function AllCards() {
             key={card._id}
             question={card.question}
             level={card.level}
+            Click={() => {
+              setSelectedCard(card)
+              setShowCard(true)
+            }}
             onDetail={() => {
               setSelectedCard(card)
               setDetail(true)
@@ -213,9 +255,30 @@ function AllCards() {
         />
       }
       
-      <DetailModal flashcard={selectedCard} open={detail} onOpenChange={setDetail} />
+      {detail && 
+        <DetailModal 
+          flashcard={selectedCard} 
+          open={detail} 
+          onOpenChange={setDetail} 
+        />
+      }
 
-      
+      {edit && 
+        <EditModal
+          flashcard={selectedCard}
+          open={edit}
+          onOpenChange={setEdit}
+          onSave={onSave}
+        />
+      }
+
+      { showCard && 
+        <PracticeCard
+          flashcard={selectedCard}
+          onAnswer={onAnswer}
+        />
+      }
+
     </div>
   )
 }
