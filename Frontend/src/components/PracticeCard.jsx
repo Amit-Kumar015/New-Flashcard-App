@@ -30,8 +30,10 @@ export function PracticeCard({ flashcard, onAnswer }) {
   if (!flashcard) return null
 
   return (
-    <div className="fixed inset-0 flex backdrop-blur-xs items-center justify-center z-30">
-        <Card className="min-w-lg max-w-2xl mx-auto overflow-y-auto p-6">
+    // <div className="fixed inset-0 flex backdrop-blur-xs items-center justify-center z-30">
+    <div className="mx-auto z-30"> 
+        {/* <Card className="min-w-lg max-w-2xl mx-auto overflow-y-auto p-6"> */}
+        <Card className="min-w-lg overflow-y-auto p-6"> 
         <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
             <Badge className={getLevelColor(flashcard.level)}>
@@ -189,5 +191,6 @@ export function PracticeCard({ flashcard, onAnswer }) {
         </div>
         </Card>
     </div>
+    // </div>
   )
 }

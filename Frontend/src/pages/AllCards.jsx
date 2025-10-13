@@ -3,6 +3,7 @@ import EditModal from '@/components/EditModal';
 import FilterModal from '@/components/FilterModal';
 import Flashcard from '@/components/Flashcard'
 import { PracticeCard } from '@/components/PracticeCard';
+import ReviewCard from '@/components/ReviewCard';
 import axios from 'axios'
 import { SlidersHorizontal, RefreshCcwIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
@@ -176,11 +177,8 @@ function AllCards() {
     }
   }
 
-  const handleResetCards = () => {
-    const localStorageCards = localStorage.getItem('Cards')
-    if(localStorageCards){
-      setCards(JSON.parse(localStorageCards))
-    }
+  const handleRefresh = async () => {
+    await fetchCards()
   }
 
   const onAnswer = async (flashcard, isCorrect) => {
@@ -201,10 +199,10 @@ function AllCards() {
   }
 
   return (
-    <div className=''>
+    <div className='mx-auto max-w-7xl px-2'>
       <div className='h-16'>
         <div className="h-16 flex justify-end items-center px-4 gap-5">
-          <button onClick={handleResetCards}>
+          <button onClick={handleRefresh}>
             <RefreshCcwIcon/>
           </button>
           <button
@@ -272,10 +270,18 @@ function AllCards() {
         />
       }
 
-      { showCard && 
+      {/* remove this and add reviewcard like in pending cards */}
+      {/* { showCard && 
         <PracticeCard
           flashcard={selectedCard}
           onAnswer={onAnswer}
+        />
+      } */}
+      { showCard && 
+        <ReviewCard
+          flashcard={selectedCard}
+          onOpenChange={setShowCard}
+          refresh={handleRefresh}
         />
       }
 

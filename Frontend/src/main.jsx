@@ -12,6 +12,7 @@ import AllCards from './pages/AllCards.jsx'
 import Home from './pages/Home.jsx'
 import PendingCards from './pages/PendingCards.jsx'
 import MyDecks from './pages/MyDecks.jsx'
+import DeckCards from './pages/DeckCards'
 
 
 const router = createBrowserRouter(
@@ -22,6 +23,7 @@ const router = createBrowserRouter(
         <Route path='/all-cards' element={<AllCards/>}/>
         <Route path='/pending-cards' element={<PendingCards/>}/>
         <Route path='/my-decks' element={<MyDecks/>}/>
+        <Route path='/my-decks/:deck' element={<DeckCards/>}/>
       </Route>
       <Route path='/login' element={<Login/>}/>
       <Route path='/signup' element={<Signup/>}/>
