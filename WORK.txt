@@ -10,7 +10,12 @@ ON PROGRESS:
   DELETE - DONE
  METHODS FOR CARDS
 -- OPEN CARD UI - DONE
--- REVIEW CARDS - almost done on review the review date is not changing
--- PENDING CARD
--- HOME PAGE
--- DECK PAGE
+-- REVIEW CARDS - almost done on review the review date is not changing - today
+-- PENDING CARD - done
+-- HOME PAGE - today
+-- creating card - today
+-- DECK PAGE - done
+-- testing
+-- clean up
+-- dark mode
+-- resend

@@ -201,18 +201,16 @@ const updateCard = async (req, res) => {
             error.status = 404
             throw error
         }
-    
-        const updatedCard = await Card.findByIdAndUpdate(id,
-            {
-                question: newQuestion || card.question,
-                answer: newAnswer || card.answer,
-                level: newLevel || card.level,
-                tag: newTag || card.tag,
-                deck: newDeck || card.deck,
-                hint: newHint || card.hint
-            },
-            {new: true}
-        )
+
+        card.question = newQuestion || card.question
+        card.answer = newAnswer || card.answer
+        card.level = newLevel || card.level
+        card.tag = newTag || card.tag
+        card.deck = newDeck || card.deck
+        card.hint = newHint || card.hint
+
+        const updatedCard = await card.save()
+
     
         if(!updatedCard){
             const error = new Error('error while updating card')
