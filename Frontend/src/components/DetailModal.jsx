@@ -131,8 +131,8 @@ export function DetailModal({ flashcard, open, onOpenChange }) {
                   <Calendar className="w-4 h-4 text-orange-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Created</p>
-                  <p className="font-medium">{formatDate(flashcard.createdAt)}</p>
+                  <p className="text-sm text-muted-foreground">Next Review</p>
+                  <p className="font-medium">{formatDate(flashcard.reviewDate)}</p>
                 </div>
               </div>
             </CardContent>
@@ -142,8 +142,8 @@ export function DetailModal({ flashcard, open, onOpenChange }) {
         <Separator className="my-6" />
 
         <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Next Review:</span>
-          <span className="font-medium">{formatDate(flashcard.reviewDate)}</span>
+          <span className="text-muted-foreground">Created:</span>
+          <span className="font-medium">{formatDate(flashcard.createdAt)}</span>
         </div>
       </div>
     </div>

@@ -78,7 +78,6 @@ export const deckIconMap = {
     "new": Sparkles,
 };
 
-// Fallback icon for when no keyword matches
 export const defaultDeckIcon = Book;
 
 export function getDeckIcon(deckName){

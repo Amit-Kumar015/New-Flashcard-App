@@ -7,7 +7,7 @@ const createCard = async (req, res) => {
         // validate data
         // authenticate user
         // create card
-        const {question, answer, level, tag, deck, hint} = req.body
+        const {question, answer, tag, deck, hint} = req.body
     
         if(!question || !answer){
             const error = new Error("send all details of card")
@@ -25,7 +25,6 @@ const createCard = async (req, res) => {
         const card = await Card.create({
             question,
             answer,
-            level,
             tag,
             deck,
             hint,

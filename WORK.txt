@@ -10,7 +10,7 @@ ON PROGRESS:
   DELETE - DONE
  METHODS FOR CARDS
 -- OPEN CARD UI - DONE
--- REVIEW CARDS - almost done on review the review date is not changing - today
+-- REVIEW CARDS - almost done on review the review date is not changing - done
 -- PENDING CARD - done
 -- HOME PAGE - today
 -- creating card - today

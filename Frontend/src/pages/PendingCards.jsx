@@ -84,7 +84,7 @@ function PendingCards() {
   const fetchCards = async () => {
     setErrorMessage('')
     try {
-      const response = await axios.get(`${url}/flashcard`)
+      const response = await axios.get(`${url}/flashcard/pending`)
 
       console.log(response);
       console.log(response.data);

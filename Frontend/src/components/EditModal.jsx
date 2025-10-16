@@ -113,7 +113,7 @@ export default function EditModal({flashcard, open, onOpenChange, onSave}){
                         placeholder="Enter the question..."
                         value={newQuestion}
                         onChange={(e) => setNewQuestion(e.target.value)}
-                        className="min-h-[100px] text-lg"
+                        className="w-96 min-h-[20px] text-lg"
                         />
                     </div>
 
@@ -124,7 +124,7 @@ export default function EditModal({flashcard, open, onOpenChange, onSave}){
                         placeholder="Enter the answer..."
                         value={newAnswer}
                         onChange={(e) => setNewAnswer(e.target.value)}
-                        className="min-h-[100px] text-lg"
+                        className="w-96 min-h-[20px] text-lg"
                         />
                     </div>
 

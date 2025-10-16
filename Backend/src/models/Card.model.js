@@ -23,7 +23,7 @@ const CardSchema = new Schema({
     deck: {
         type: String,
         trim: true,
-        default: 'untitled',
+        default: 'General',
         validate: {
             validator: function(v){
                 return v.trim().length > 0

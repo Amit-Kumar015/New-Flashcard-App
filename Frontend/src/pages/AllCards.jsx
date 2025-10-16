@@ -1,3 +1,4 @@
+import CreateCardModal from '@/components/CreateCardModal';
 import { DetailModal } from '@/components/DetailModal';
 import EditModal from '@/components/EditModal';
 import FilterModal from '@/components/FilterModal';
@@ -24,6 +25,7 @@ function AllCards() {
   const [filterTag, setFilterTag] = useState("")
   const [filterDeck, setFilterDeck] = useState("")
   const [showCard, setShowCard]  =useState(false)
+  const [create, setCreate] = useState(false)
 
 
   useEffect(() => {
@@ -181,20 +183,38 @@ function AllCards() {
     await fetchCards()
   }
 
-  const onAnswer = async (flashcard, isCorrect) => {
-    try {
-      const id = flashcard._id
-      const level = flashcard.level
+  // const onAnswer = async (flashcard, isCorrect) => {
+  //   try {
+  //     const id = flashcard._id
+  //     const level = flashcard.level
 
-      await axios.patch(`${url}/flashcard/${id}`, {
-        newLevel: isCorrect ? level+1 : level-1
+  //     await axios.patch(`${url}/flashcard/${id}`, {
+  //       newLevel: isCorrect ? level+1 : level-1
+  //     })
+  //     .then((res) => {
+  //       alert("level updated")
+  //       console.log(res.data);
+  //     })
+  //   } catch (error) {
+  //     console.error("error while updating level", error);
+  //   }
+  // }
+
+  const onSubmit = async (question, answer, tag, deck, hint ) => {
+    try {
+      await axios.post(`${url}/flashcard`, {
+        question: question.trim(),
+        answer: answer.trim(), 
+        tag: tag.trim(),
+        deck: deck.trim(),
+        hint: hint.trim()
       })
       .then((res) => {
-        alert("level updated")
+        alert("card created")
         console.log(res.data);
       })
     } catch (error) {
-      console.error("error while updating level", error);
+      console.error("error while creating card", error);
     }
   }
 
@@ -211,6 +231,13 @@ function AllCards() {
           >
             <SlidersHorizontal className='w-4 h-4 mr-2' />
             Filter
+          </button>
+          <button
+            className="bg-gray-500 text-white px-4 py-2 rounded-lg flex justify-center items-center hover:bg-gray-600 transition"
+            onClick={() => setCreate(true)}
+          >
+            <SlidersHorizontal className='w-4 h-4 mr-2' />
+            Create
           </button>
         </div>
       </div>
@@ -282,6 +309,14 @@ function AllCards() {
           flashcard={selectedCard}
           onOpenChange={setShowCard}
           refresh={handleRefresh}
+        />
+      }
+
+      { create && 
+        <CreateCardModal 
+          onOpenChange={setCreate}
+          onSubmit={onSubmit}
+          handleRefresh={handleRefresh}
         />
       }
 
