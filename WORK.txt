@@ -13,9 +13,10 @@ ON PROGRESS:
 -- REVIEW CARDS - almost done on review the review date is not changing - done
 -- PENDING CARD - done
 -- HOME PAGE - today
--- creating card - today
+-- creating card - done
 -- DECK PAGE - done
 -- testing
 -- clean up
+-- integrate ai
 -- dark mode
 -- resend

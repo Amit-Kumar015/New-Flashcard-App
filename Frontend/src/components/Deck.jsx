@@ -8,7 +8,7 @@ export default function Deck({title, icon: IconComponent, total, onDelete, onCli
 
 
   return (
-    <Card className="relative border rounded-xl shadow-sm hover:shadow-md transition-shadow" onClick={onClick}>
+    <Card className="relative border rounded-xl shadow-sm hover:shadow-md transition-shadow min-w-[210px] mr-4 flex-shrink-0" onClick={onClick}>
       <CardContent className="p-4">
         {/* Top row: icon + menu */}
         <div className="flex items-start justify-between">

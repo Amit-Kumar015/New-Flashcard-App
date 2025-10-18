@@ -48,7 +48,7 @@ function App() {
 
 
   return (
-    <div className="w-screen h-screen flex flex-col relative">
+    <div className="w-screen h-screen flex flex-col relative overflow-x-hidden">
     {/* Header */}
     <Header />
 
