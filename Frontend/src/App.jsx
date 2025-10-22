@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 function App() {
   const navItems = [
@@ -26,8 +27,9 @@ function App() {
   ]
 
   const navigate = useNavigate()
+  const token = localStorage.getItem("userToken")
   // for testing setting token manually
-  axios.defaults.headers.common['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODk0NGYzZDU0MGM0YTc0YjYzNTRmYWQiLCJpYXQiOjE3NjExMDk2NTgsImV4cCI6MTc2MTk3MzY1OH0.09ranH77zwjVGBmK9l2sbXToXQPmQrEYWevzOTtbyMc'
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
 
   // working

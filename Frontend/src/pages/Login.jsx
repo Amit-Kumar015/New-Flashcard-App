@@ -38,7 +38,7 @@ function Login() {
         password: formData.password
       })
 
-      localStorage.setItem("token", response.data?.token)
+      localStorage.setItem("userToken", response.data?.token)
       dispatch(login({
         userData: {
           token: response.data?.token

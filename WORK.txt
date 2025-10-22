@@ -16,7 +16,7 @@ ON PROGRESS:
 -- creating card - done
 -- DECK PAGE - done
 -- testing - deleting decks not deletingits cards - done
--- error handling
+-- error handling - done
 -- clean up
 -- integrate ai
 -- dark mode
