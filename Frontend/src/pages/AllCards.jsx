@@ -201,7 +201,7 @@ function AllCards() {
   // }
 
   const onSubmit = async (question, answer, tag, deck, hint ) => {
-    try {
+    try {      
       await axios.post(`${url}/flashcard`, {
         question: question.trim(),
         answer: answer.trim(), 
@@ -220,7 +220,7 @@ function AllCards() {
 
   return (
     <div className='mx-auto max-w-7xl px-2'>
-      <div className='h-16'>
+      <div className='h-16 mb-6'>
         <div className="h-16 flex justify-end items-center px-4 gap-5">
           <button onClick={handleRefresh}>
             <RefreshCcwIcon/>
@@ -245,8 +245,7 @@ function AllCards() {
         {Array.isArray(cards) && cards.map((card) => (
           <Flashcard
             key={card._id}
-            question={card.question}
-            level={card.level}
+            card={card}
             Click={() => {
               setSelectedCard(card)
               setShowCard(true)
@@ -294,6 +293,7 @@ function AllCards() {
           open={edit}
           onOpenChange={setEdit}
           onSave={onSave}
+          refresh={handleRefresh}
         />
       }
 

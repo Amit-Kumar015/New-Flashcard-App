@@ -260,7 +260,6 @@ export default function Home() {
 
   return (
     <div className="space-y-6">
-      {/* 1. Hero / Quick Start Section */}
       <Card className="bg-gradient-to-r from-blue-50 to-indigo-100 p-8 shadow-xl">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div>
@@ -275,13 +274,12 @@ export default function Home() {
           <Button
             size="lg"
             className="mt-6 md:mt-0 bg-green-600 hover:bg-green-700 text-lg py-7 px-8 shadow-md transition-transform transform hover:scale-105"
-            onClick={() => navigate('/pending-cards')} // Navigate to your pending cards route
+            onClick={() => navigate('/pending-cards')} 
           >
             <Zap className="w-5 h-5 mr-2" />
             Start Review Session ({dashboardStats.pendingCards})
           </Button>
         </div>
-        {/* <ProgressBar percentage={dashboardStats.masteryPercentage} /> */}
         <p className="text-right text-sm text-gray-600 mt-1">
           Overall Mastery: {dashboardStats.masteryPercentage}%
         </p>
@@ -289,12 +287,10 @@ export default function Home() {
 
       <div className='w-full flex justify-center'>
         <div className='w-10/12'>
-          {/* Removed justify-center and items-center from the inner div as they weren't doing anything */}
           <Bar options={options} data={data} />
         </div>
       </div>
 
-      {/* 2. Key Stats & Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <Card className="shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -330,28 +326,16 @@ export default function Home() {
         </Card>
       </div>
 
-      {/* 3. Charts and Recent Decks Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Bar Chart Section */}
-        {/* <CardLevelChart /> */}
-
-        {/* Recent Decks Section */}
-        <Card className="col-span-1 shadow-lg lg:col-span-3"> {/* Use lg:col-span-3 to make it full width */}
+        <Card className="col-span-1 shadow-lg lg:col-span-3"> 
           <CardHeader className="flex flex-row items-center justify-between">
-            {/* 1. Updated Title */}
             <CardTitle className="text-xl">All Decks ({decks.length})</CardTitle>
-
-            {/* 2. Optional: Add a button to create a new deck */}
-            {/* <Button variant="outline" size="sm" onClick={() => navigate('/create-deck')}>
-                  New Deck
-                </Button> */}
           </CardHeader>
 
           <CardContent>
-            {/* 3. Horizontal Scroll Container */}
             <div
-              className="flex w-full overflow-x-auto pb-4 whitespace-nowrap" // Use negative margin/padding to hide scrollbar nicely, though `overflow-x-auto` is key
-              style={{ scrollbarWidth: 'none' }} // Hide scrollbar in Firefox
+              className="flex w-full overflow-x-auto pb-4 whitespace-nowrap" 
+              style={{ scrollbarWidth: 'none' }}
             >
 
               {decks.length > 0 ? (
@@ -361,7 +345,7 @@ export default function Home() {
                     title={d.deck}
                     icon={getDeckIcon(d.deck)}
                     total={d.totalCards}
-                    onDelete={onDelete}
+                    onDelete={() => onDelete(d.deck)}
                     onClick={() => navigate(`/my-decks/${d.deck}`)}
                   />
                 ))

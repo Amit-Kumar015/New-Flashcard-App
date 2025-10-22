@@ -73,7 +73,7 @@ function MyDecks() {
                   title={d.deck}
                   icon={getDeckIcon(d.deck)}
                   total={d.totalCards}
-                  onDelete={onDelete}
+                  onDelete={() => onDelete(d.deck)}
                   onClick={() => handleClick(d.deck)}
                 />
               ))}
@@ -82,7 +82,6 @@ function MyDecks() {
         </div>
       </div>
     </div>
-
   )
 }
 

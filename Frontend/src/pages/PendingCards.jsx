@@ -187,7 +187,7 @@ function PendingCards() {
 
   return (
     <div className=''>
-      <div className='h-16'>
+      <div className='h-16 mb-6'>
         <div className="h-16 flex justify-end items-center px-4 gap-5">
           <button onClick={handleRefresh}>
             <RefreshCcwIcon/>
@@ -212,8 +212,7 @@ function PendingCards() {
         {Array.isArray(cards) && cards.map((card) => (
           <Flashcard
             key={card._id}
-            question={card.question}
-            level={card.level}
+            card={card}
             Click={() => {
               setSelectedCard(card)
               setShowCard(true)
@@ -261,6 +260,7 @@ function PendingCards() {
           open={edit}
           onOpenChange={setEdit}
           onSave={onSave}
+          refresh={handleRefresh}
         />
       }
 
@@ -275,7 +275,11 @@ function PendingCards() {
       }
 
       { review && 
-        <ReviewAllCard cards={cards} onOpenChange={setReview} refresh={handleRefresh}/>
+        <ReviewAllCard
+         cards={cards}
+          onOpenChange={setReview}
+          refresh={handleRefresh}
+        />
       }
 
     </div>

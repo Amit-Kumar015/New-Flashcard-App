@@ -27,7 +27,7 @@ function App() {
 
   const navigate = useNavigate()
   // for testing setting token manually
-  axios.defaults.headers.common['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODk0NGYzZDU0MGM0YTc0YjYzNTRmYWQiLCJpYXQiOjE3NjAxODMxOTMsImV4cCI6MTc2MTA0NzE5M30.AXmOaw5BihkZCPUVRVneV7hK8fabOkX7KJSC-yWtl0I'
+  axios.defaults.headers.common['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODk0NGYzZDU0MGM0YTc0YjYzNTRmYWQiLCJpYXQiOjE3NjExMDk2NTgsImV4cCI6MTc2MTk3MzY1OH0.09ranH77zwjVGBmK9l2sbXToXQPmQrEYWevzOTtbyMc'
 
 
   // working

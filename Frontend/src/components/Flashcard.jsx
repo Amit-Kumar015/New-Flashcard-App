@@ -5,8 +5,7 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 export default function Flashcard({
-    question,
-    level,
+    card,
     Click,
     onDetail,
     onEdit,
@@ -27,10 +26,15 @@ export default function Flashcard({
     
     return (
         <Card className="w-full h-48 relative hover:shadow-lg transition-shadow duration-200" onClick={Click}>
-            <div className="absolute top-4 left-4 z-10">
-                <Badge variant="secondary" className={getLevelColor(level)}>
-                    {level}
+            <div className="absolute top-4 left-4 z-10 ">
+                <Badge variant="secondary" className={getLevelColor(card.level)}>
+                    L{card.level}
                 </Badge>
+                {card.tag && 
+                    <Badge variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200 ml-2">
+                        {card.tag}
+                    </Badge>
+                }
             </div>
 
             <div className="absolute top-4 right-4 z-10">
@@ -70,7 +74,11 @@ export default function Flashcard({
             </div>
 
             <CardContent className="flex items-center justify-center h-full p-6">
-                <p className="text-center text-lg font-medium text-gray-800 leading-relaxed">{question}</p>
+                <p className="text-center text-lg font-medium text-gray-800 leading-relaxed">{
+                card.question.length > 50
+                ? card.question.slice(0, 50) + "..."
+                : card.question
+                }</p>
             </CardContent>
         </Card>
     )

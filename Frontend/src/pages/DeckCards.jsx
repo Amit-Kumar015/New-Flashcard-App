@@ -3,6 +3,7 @@ import EditModal from '@/components/EditModal';
 import FilterModal from '@/components/FilterModal';
 import Flashcard from '@/components/Flashcard'
 import { PracticeCard } from '@/components/PracticeCard';
+import ReviewCard from '@/components/ReviewCard';
 import axios from 'axios'
 import { SlidersHorizontal, RefreshCcwIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
@@ -233,8 +234,7 @@ function DeckCards() {
 				{Array.isArray(cards) && cards.map((card) => (
 					<Flashcard
 						key={card._id}
-						question={card.question}
-						level={card.level}
+						card={card}
 						Click={() => {
 							setSelectedCard(card)
 							setShowCard(true)
@@ -286,9 +286,10 @@ function DeckCards() {
 			}
 
 			{showCard &&
-				<PracticeCard
+				<ReviewCard 
 					flashcard={selectedCard}
-					onAnswer={onAnswer}
+					onOpenChange={setShowCard}
+					refresh={handleRefresh}
 				/>
 			}
 

@@ -12,10 +12,11 @@ ON PROGRESS:
 -- OPEN CARD UI - DONE
 -- REVIEW CARDS - almost done on review the review date is not changing - done
 -- PENDING CARD - done
--- HOME PAGE - today
+-- HOME PAGE - done
 -- creating card - done
 -- DECK PAGE - done
--- testing
+-- testing - deleting decks not deletingits cards
+-- error handling
 -- clean up
 -- integrate ai
 -- dark mode

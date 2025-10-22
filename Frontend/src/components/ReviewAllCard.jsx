@@ -197,7 +197,6 @@ export default function ReviewAllCard({ cards, onOpenChange, refresh }) {
                     </Button>
                 </div>
 
-                {/* Close Button at the bottom or top right */}
                 <div className="absolute top-4 right-4">
                      <Button 
                         variant="ghost" 
@@ -209,8 +208,6 @@ export default function ReviewAllCard({ cards, onOpenChange, refresh }) {
                         <X className="h-6 w-6" />
                     </Button>
                 </div>
-                
-                {/* Removed the bottom close button as it's better placed in the top right of the modal */}
             </div>
         </div>
     );

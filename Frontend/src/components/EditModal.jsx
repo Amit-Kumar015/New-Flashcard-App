@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Edit, Save, X } from "lucide-react"
 
-export default function EditModal({flashcard, open, onOpenChange, onSave}){
+export default function EditModal({flashcard, open, onOpenChange, onSave, refresh}){
     const [newQuestion, setNewQuestion] = useState("")
     const [newAnswer, setNewAnswer] = useState("")
     const [newLevel, setNewLevel] = useState(null)
@@ -64,6 +64,7 @@ export default function EditModal({flashcard, open, onOpenChange, onSave}){
             if(onSave){
                 await onSave(flashcard._id, updateCard)
             }
+            refresh()
             onOpenChange(false)
         } catch (error) {
             console.error("Error saving flashcard:", error)

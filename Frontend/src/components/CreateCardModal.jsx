@@ -21,32 +21,36 @@ function CreateCardModal({ onOpenChange, onSubmit, handleRefresh }) {
 		const newErrors = {}
 
 		if (!question.trim()) {
-      newErrors.question = "Question is required"
-    }
-    if (!answer.trim()) {
-      newErrors.answer = "Answer is required"
-    }
-    if (!deck.trim()) {
-      newErrors.deck = "Deck is required"
-    }
-    if (!level) {
-      newErrors.level = "Level is required"
-    }
+			newErrors.question = "Question is required"
+		}
+		if (!answer.trim()) {
+			newErrors.answer = "Answer is required"
+		}
+		if (!deck.trim()) {
+			newErrors.deck = "Deck is required"
+		}
 
 		setErrors(newErrors)
-		return newErrors.size() === 0
+		return Object.keys(newErrors).length === 0
 	}
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault()
+		setIsLoading(true)
 
 		if(!validate()){
 			return 
 		}
 
-		onSubmit(question, answer, tag, deck, hint)
-		setIsLoading(false)
-		// onOpenChange(false)
+		try {
+			await onSubmit(question, answer, tag, deck, hint)
+			onOpenChange(false)
+			handleRefresh()
+		} catch (error) {
+			console.error("Submission failed:", error);
+		} finally {
+			setIsLoading(false)
+		}
 	}
 
 	const handleReset = () => {

@@ -72,11 +72,14 @@ function FilterModal({
                     <SelectValue placeholder="Select a tag" />
                   </SelectTrigger>
                   <SelectContent>
-                    {tag.map((item, index) => (
-                      <SelectItem key={index} value={item.tag}>
-                        {item.tag}
-                      </SelectItem>
-                    ))}
+                    {tag.filter((item) =>
+                      item.tag && item.tag.trim() !== ""
+                    )
+                      .map((item, index) => (
+                        <SelectItem key={index} value={item.tag}>
+                          {item.tag}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -90,11 +93,14 @@ function FilterModal({
                     <SelectValue placeholder="Select a deck" />
                   </SelectTrigger>
                   <SelectContent>
-                    {deck.map((item, index) => (
-                      <SelectItem key={index} value={item.deck}>
-                        {item.deck}
-                      </SelectItem>
-                    ))}
+                    {deck.filter((item) =>
+                      item.deck && item.deck.trim() !== ""
+                    )
+                      .map((item, index) => (
+                        <SelectItem key={index} value={item.deck}>
+                          {item.deck}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
