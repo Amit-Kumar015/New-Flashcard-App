@@ -13,6 +13,8 @@ import Home from './pages/Home.jsx'
 import PendingCards from './pages/PendingCards.jsx'
 import MyDecks from './pages/MyDecks.jsx'
 import DeckCards from './pages/DeckCards'
+// import { Toaster } from './components/ui/sonner'
+import { ToastContainer } from 'react-toastify';
 
 
 const router = createBrowserRouter(
@@ -33,8 +35,21 @@ const router = createBrowserRouter(
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    {/* <Toaster/> */}
     <Provider store={store}>
     <RouterProvider router={router}/>
     </Provider>
+    <ToastContainer 
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={true}
+      newestOnTop={true}
+      closeOnClick={true}
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+    />
   </StrictMode>,
 )

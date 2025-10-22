@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Plus, X } from 'lucide-react'
+import { toast } from 'react-toastify'
 
 function CreateCardModal({ onOpenChange, onSubmit, handleRefresh }) {
 	const [question, setQuestion] = useState("")
@@ -47,6 +48,7 @@ function CreateCardModal({ onOpenChange, onSubmit, handleRefresh }) {
 			onOpenChange(false)
 			handleRefresh()
 		} catch (error) {
+			toast.error("Submission failed")
 			console.error("Submission failed:", error);
 		} finally {
 			setIsLoading(false)

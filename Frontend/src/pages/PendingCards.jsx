@@ -9,6 +9,7 @@ import ReviewCard from '@/components/ReviewCard';
 import axios from 'axios'
 import { SlidersHorizontal, RefreshCcwIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify';
 
 
 function PendingCards() {
@@ -25,56 +26,62 @@ function PendingCards() {
   const [filterLevel, setFilterLevel] = useState("")
   const [filterTag, setFilterTag] = useState("")
   const [filterDeck, setFilterDeck] = useState("")
-  const [showCard, setShowCard]  = useState(false)
+  const [showCard, setShowCard] = useState(false)
   const [review, setReview] = useState(false)
 
 
   useEffect(() => {
-    try {
-      const getTag = async () => {
+    const getTag = async () => {
+      try {
         const response = await axios.get(`${url}/flashcard/tag`)
-
         settag(response.data?.allTag)
-      }
-      getTag()
-    } catch (error) {
-      setErrorMessage(error.response?.data?.error || "Fetching tags failed")
 
-      if (error.response) {
-        console.log('Status:', error.response.status);
-        console.log('Message:', error.response.data.error);
+      } catch (error) {
+        toast.error(error.response?.data?.error || "Fetching tags failed")
+        console.error("Fetching tags failed ", error);
+        
+        // setErrorMessage(error.response?.data?.error || "Fetching tags failed")
+
+        // if (error.response) {
+        //   console.log('Status:', error.response.status);
+        //   console.log('Message:', error.response.data.error);
+        // }
+        // else if (error.request) {
+        //   console.log('No response received:', error.request);
+        // }
+        // else {
+        //   console.log('Error:', error.message);
+        // }
       }
-      else if (error.request) {
-        console.log('No response received:', error.request);
-      }
-      else {
-        console.log('Error:', error.message);
-      }
+
     }
+    getTag()
   }, [])
 
   useEffect(() => {
+    const getDecks = async () => {
     try {
-      const getDecks = async () => {
         const response = await axios.get(`${url}/flashcard/decks`)
-
         setDeck(response.data?.allDecks)
-      }
-      getDecks()
-    } catch (error) {
-      setErrorMessage(error.response?.data?.error || "Fetching decks failed")
-
-      if (error.response) {
-        console.log('Status:', error.response.status);
-        console.log('Message:', error.response.data.error);
-      }
-      else if (error.request) {
-        console.log('No response received:', error.request);
-      }
-      else {
-        console.log('Error:', error.message);
+      } catch (error) {
+        toast.error(error.response?.data?.error || "Fetching decks failed")
+        console.error("Fetching decks failed ", error);
+        // setErrorMessage(error.response?.data?.error || "Fetching decks failed")
+        
+        // if (error.response) {
+        //   console.log('Status:', error.response.status);
+        //   console.log('Message:', error.response.data.error);
+        // }
+        // else if (error.request) {
+        //   console.log('No response received:', error.request);
+        // }
+        // else {
+        //   console.log('Error:', error.message);
+        // }
       }
     }
+
+    getDecks()
   }, [])
 
   useEffect(() => {
@@ -86,32 +93,34 @@ function PendingCards() {
     try {
       const response = await axios.get(`${url}/flashcard/pending`)
 
-      console.log(response);
-      console.log(response.data);
+      // console.log(response);
+      // console.log(response.data);
 
-      if (response?.data.length == 0) {
-        console.log('No cards found');
-        alert("no cards found")
-      }
-      console.log("actual data: ", response?.data?.data);
-      localStorage.setItem('Cards', JSON.stringify(response?.data?.data))
+      // if (response?.data.length == 0) {
+      //   console.log('No cards found');
+      //   alert("no cards found")
+      // }
+      // console.log("actual data: ", response?.data?.data);
+      // localStorage.setItem('Cards', JSON.stringify(response?.data?.data))
       setCards(response?.data?.data)
 
-      alert('cards fetched successfully')
+      // alert('cards fetched successfully')
     }
     catch (error) {
-      setErrorMessage(error.response?.data?.error || "Fetching cards failed")
+      toast.error(error.response?.data?.error || "Fetching cards failed")
+      console.error("Fetching cards failed: ", error);
+      // setErrorMessage(error.response?.data?.error || "Fetching cards failed")
 
-      if (error.response) {
-        console.log('Status:', error.response.status);
-        console.log('Message:', error.response.data.error);
-      }
-      else if (error.request) {
-        console.log('No response received:', error.request);
-      }
-      else {
-        console.log('Error:', error.message);
-      }
+      // if (error.response) {
+      //   console.log('Status:', error.response.status);
+      //   console.log('Message:', error.response.data.error);
+      // }
+      // else if (error.request) {
+      //   console.log('No response received:', error.request);
+      // }
+      // else {
+      //   console.log('Error:', error.message);
+      // }
     }
   }
 
@@ -129,18 +138,20 @@ function PendingCards() {
 
       setCards(response.data?.cards)
     } catch (error) {
-      setErrorMessage(error.response?.data?.error || "Fetching cards failed")
+      toast.error(error.response?.data?.error || "failed to filter cards")
+      console.error("failed to filter cards: ", error);
+      // setErrorMessage(error.response?.data?.error || "Fetching cards failed")
 
-      if (error.response) {
-        console.log('Status:', error.response.status);
-        console.log('Message:', error.response.data.error);
-      }
-      else if (error.request) {
-        console.log('No response received:', error.request);
-      }
-      else {
-        console.log('Error:', error.message);
-      }
+      // if (error.response) {
+      //   console.log('Status:', error.response.status);
+      //   console.log('Message:', error.response.data.error);
+      // }
+      // else if (error.request) {
+      //   console.log('No response received:', error.request);
+      // }
+      // else {
+      //   console.log('Error:', error.message);
+      // }
     }
     setFilter(false)
   }
@@ -153,30 +164,34 @@ function PendingCards() {
 
   const onDelete = async (id) => {
     axios.delete(`${url}/flashcard/${id}`)
-    .then((response) => {
-      fetchCards()
-      console.log("card deleted: ", response);
-      alert("card deleted")
-    }).catch((err) => {
-      console.log("error deleting card: ", err);
-    })
+      .then((response) => {
+        toast.success("Card deleted successfully")
+        console.log("card deleted: ", response);
+        fetchCards()
+        // alert("card deleted")
+      }).catch((err) => {
+        toast.error("Error deleting card")
+        console.error("error deleting card: ", err);
+      })
   }
 
   const onSave = async (id, updateCard) => {
     try {
       const response = await axios.patch(`${url}/flashcard/${id}`, {
-        newQuestion: updateCard.question, 
+        newQuestion: updateCard.question,
         newAnswer: updateCard.answer,
-        newLevel: updateCard.level, 
-        newTag: updateCard.tag, 
-        newDeck: updateCard.deck, 
+        newLevel: updateCard.level,
+        newTag: updateCard.tag,
+        newDeck: updateCard.deck,
         newHint: updateCard.hint
       })
-      
-      alert("card updated successfully")
-      console.log("card updated successfully", response.data);
+
+      toast.success("card updated successfully")
+      // alert("card updated successfully")
+      // console.log("card updated successfully", response.data);
     } catch (error) {
-      console.log("error while updating card: ", error);      
+      toast.error("Error in updating card")
+      console.error("error while updating card: ", error); 
     }
   }
 
@@ -190,7 +205,7 @@ function PendingCards() {
       <div className='h-16 mb-6'>
         <div className="h-16 flex justify-end items-center px-4 gap-5">
           <button onClick={handleRefresh}>
-            <RefreshCcwIcon/>
+            <RefreshCcwIcon />
           </button>
           <button
             className="bg-gray-500 text-white px-4 py-2 rounded-lg flex justify-center items-center hover:bg-gray-600 transition"
@@ -229,7 +244,7 @@ function PendingCards() {
           />
         ))}
       </div>
-      
+
       {filter &&
         <FilterModal
           filterLevel={filterLevel}
@@ -245,16 +260,16 @@ function PendingCards() {
           handleSubmit={handleSubmit}
         />
       }
-      
-      {detail && 
-        <DetailModal 
-          flashcard={selectedCard} 
-          open={detail} 
-          onOpenChange={setDetail} 
+
+      {detail &&
+        <DetailModal
+          flashcard={selectedCard}
+          open={detail}
+          onOpenChange={setDetail}
         />
       }
 
-      {edit && 
+      {edit &&
         <EditModal
           flashcard={selectedCard}
           open={edit}
@@ -265,8 +280,8 @@ function PendingCards() {
       }
 
       {/* need to make new file for the lower screen of the practice card send card, and setopen same logic like reviewallcard */}
-      
-      { showCard && 
+
+      {showCard &&
         <ReviewCard
           flashcard={selectedCard}
           onOpenChange={setShowCard}
@@ -274,9 +289,9 @@ function PendingCards() {
         />
       }
 
-      { review && 
+      {review &&
         <ReviewAllCard
-         cards={cards}
+          cards={cards}
           onOpenChange={setReview}
           refresh={handleRefresh}
         />

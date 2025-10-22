@@ -45,20 +45,23 @@ function Signup() {
 					token: response.data?.token
 				}
 			}))
+			toast.success("Signed in successfully")
 			navigate('/')
 		} catch (error) {
-			setErrorMessage(error.response?.data?.error || "Sign up failed")
+			toast.error(error.response?.data?.error || "Sign up failed")
+			console.error("Sign up failed: ", error);
+			// setErrorMessage(error.response?.data?.error || "Sign up failed")
 
-			if (error.response) {
-				console.log('Status:', error.response.status);
-				console.log('Message:', error.response.data.error);
-			}
-			else if (error.request) {
-				console.log('No response received:', error.request);
-			}
-			else {
-				console.log('Error:', error.message);
-			}
+			// if (error.response) {
+			// 	console.log('Status:', error.response.status);
+			// 	console.log('Message:', error.response.data.error);
+			// }
+			// else if (error.request) {
+			// 	console.log('No response received:', error.request);
+			// }
+			// else {
+			// 	console.log('Error:', error.message);
+			// }
 			setLoading(false)
 		}
 	}

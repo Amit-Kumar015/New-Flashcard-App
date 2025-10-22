@@ -82,6 +82,7 @@ import { Button } from "./ui/button"; // Assuming this is your custom button com
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 // Assuming you still need to use axios and url for the onAnswer logic
 import axios from "axios"; 
+import { toast } from "react-toastify";
 
 // Destructure props correctly: { cards, onOpenChange }
 // I assume you want a way to close the review session, so I'm adding `onOpenChange` here based on your existing code.
@@ -141,11 +142,13 @@ export default function ReviewAllCard({ cards, onOpenChange, refresh }) {
             } else {
                 // Last card was answered, you might want to show a completion message or close.
                 // For now, let's just stay on the last card until the user closes the session.
-                console.log("Review session completed!");
+                toast.success("Review session completed!")
+                // console.log("Review session completed!");
                 handleClose();
             }
 
         } catch (error) {
+            toast.error("Error while updating level")
             console.error("error while updating level", error);
         }
     };

@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { login } from '../store/authSlice'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 function Login() {
   const dispatch = useDispatch()
@@ -43,20 +44,24 @@ function Login() {
           token: response.data?.token
         }
       }))
+      toast.success("Logged in successfully")
       navigate('/')
     } catch (error) {
-      setErrorMessage(error.response?.data?.error || "Login failed")
+      toast.error(error.response?.data?.error || "Login failed")
+      console.error("login failed: ", error);
       
-      if(error.response){
-        console.log('Status:', error.response.status);   
-        console.log('Message:', error.response.data.error);    
-      }
-      else if(error.request){
-        console.log('No response received:', error.request);
-      }
-      else{
-        console.log('Error:', error.message);
-      }    
+      // setErrorMessage(error.response?.data?.error || "Login failed")
+      
+      // if(error.response){
+      //   console.log('Status:', error.response.status);   
+      //   console.log('Message:', error.response.data.error);    
+      // }
+      // else if(error.request){
+      //   console.log('No response received:', error.request);
+      // }
+      // else{
+      //   console.log('Error:', error.message);
+      // }    
       setLoading(false)
     }
   }

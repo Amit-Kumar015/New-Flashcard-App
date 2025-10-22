@@ -3,11 +3,13 @@ import EditModal from '@/components/EditModal';
 import FilterModal from '@/components/FilterModal';
 import Flashcard from '@/components/Flashcard'
 import { PracticeCard } from '@/components/PracticeCard';
+import ReviewAllCard from '@/components/ReviewAllCard';
 import ReviewCard from '@/components/ReviewCard';
 import axios from 'axios'
 import { SlidersHorizontal, RefreshCcwIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 
 function DeckCards() {
@@ -25,34 +27,35 @@ function DeckCards() {
 	const [filterTag, setFilterTag] = useState("")
 	const [filterDeck, setFilterDeck] = useState("")
 	const [showCard, setShowCard] = useState(false)
+	const [review, setReview] = useState(false)
 
 	const { deck } = useParams()
 
 
 	// dont need tags
-	useEffect(() => {
-		try {
-			const getTag = async () => {
-				const response = await axios.get(`${url}/flashcard/tag`)
+	// useEffect(() => {
+	// 	try {
+	// 		const getTag = async () => {
+	// 			const response = await axios.get(`${url}/flashcard/tag`)
 
-				settag(response.data?.allTag)
-			}
-			getTag()
-		} catch (error) {
-			setErrorMessage(error.response?.data?.error || "Fetching tags failed")
+	// 			settag(response.data?.allTag)
+	// 		}
+	// 		getTag()
+	// 	} catch (error) {
+	// 		setErrorMessage(error.response?.data?.error || "Fetching tags failed")
 
-			if (error.response) {
-				console.log('Status:', error.response.status);
-				console.log('Message:', error.response.data.error);
-			}
-			else if (error.request) {
-				console.log('No response received:', error.request);
-			}
-			else {
-				console.log('Error:', error.message);
-			}
-		}
-	}, [])
+	// 		if (error.response) {
+	// 			console.log('Status:', error.response.status);
+	// 			console.log('Message:', error.response.data.error);
+	// 		}
+	// 		else if (error.request) {
+	// 			console.log('No response received:', error.request);
+	// 		}
+	// 		else {
+	// 			console.log('Error:', error.message);
+	// 		}
+	// 	}
+	// }, [])
 
 	// dont need decks
 	//   useEffect(() => {
@@ -88,82 +91,86 @@ function DeckCards() {
 		try {
 			const response = await axios.get(`${url}/flashcard/decks/${deck}`)
 
-			console.log(response.data);
+			// console.log(response.data);
 			//   console.log(response.data);
 
 			//   if (response?.data.length == 0) {
 			//     console.log('No cards found');
 			//     alert("no cards found")
 			//   }
-			console.log("actual data: ", response.data?.cards);
+			// console.log("actual data: ", response.data?.cards);
 			//   localStorage.setItem('Cards', JSON.stringify(response?.data?.data))
 			setCards(response.data?.cards)
 
-			alert('cards fetched successfully')
+			// alert('cards fetched successfully')
 		}
 		catch (error) {
-			setErrorMessage(error.response?.data?.error || "Fetching cards failed")
+			toast.error(error.response?.data?.error || "Fetching cards failed")
+			console.error("Fetching cards failed: ", error);
+			// setErrorMessage(error.response?.data?.error || "Fetching cards failed")
 
-			if (error.response) {
-				console.log('Status:', error.response.status);
-				console.log('Message:', error.response.data.error);
-			}
-			else if (error.request) {
-				console.log('No response received:', error.request);
-			}
-			else {
-				console.log('Error:', error.message);
-			}
+			// if (error.response) {
+			// 	console.log('Status:', error.response.status);
+			// 	console.log('Message:', error.response.data.error);
+			// }
+			// else if (error.request) {
+			// 	console.log('No response received:', error.request);
+			// }
+			// else {
+			// 	console.log('Error:', error.message);
+			// }
 		}
 	}
 
 
 	// dont need filter
-	const handleSubmit = async (e) => {
-		e.preventDefault()
-		try {
-			const response = await axios.get(`${url}/flashcard/filter`, {
-				params: {
-					level: filterLevel.replace("Level ", ""),
-					tag: filterTag,
-					deck: filterDeck
-				}
-			})
+	// const handleSubmit = async (e) => {
+	// 	e.preventDefault()
+	// 	try {
+	// 		const response = await axios.get(`${url}/flashcard/filter`, {
+	// 			params: {
+	// 				level: filterLevel.replace("Level ", ""),
+	// 				tag: filterTag,
+	// 				deck: filterDeck
+	// 			}
+	// 		})
 
-			setCards(response.data?.cards)
-		} catch (error) {
-			setErrorMessage(error.response?.data?.error || "Fetching cards failed")
+	// 		setCards(response.data?.cards)
+	// 	} catch (error) {
+	// 		setErrorMessage(error.response?.data?.error || "Fetching cards failed")
 
-			if (error.response) {
-				console.log('Status:', error.response.status);
-				console.log('Message:', error.response.data.error);
-			}
-			else if (error.request) {
-				console.log('No response received:', error.request);
-			}
-			else {
-				console.log('Error:', error.message);
-			}
-		}
-		setFilter(false)
-	}
+	// 		if (error.response) {
+	// 			console.log('Status:', error.response.status);
+	// 			console.log('Message:', error.response.data.error);
+	// 		}
+	// 		else if (error.request) {
+	// 			console.log('No response received:', error.request);
+	// 		}
+	// 		else {
+	// 			console.log('Error:', error.message);
+	// 		}
+	// 	}
+	// 	setFilter(false)
+	// }
 
 	// dont need this
-	const handleReset = () => {
-		setFilterLevel("")
-		setFilterTag("")
-		setFilterDeck("")
-	}
+	// const handleReset = () => {
+	// 	setFilterLevel("")
+	// 	setFilterTag("")
+	// 	setFilterDeck("")
+	// }
 
 	const onDelete = async (id) => {
 		axios.delete(`${url}/flashcard/${id}`)
-			.then((response) => {
-				fetchCards()
-				console.log("card deleted: ", response);
-				alert("card deleted")
-			}).catch((err) => {
-				console.log("error deleting card: ", err);
-			})
+		.then((response) => {
+			toast.success("Card deleted successfully")
+			console.log("card deleted: ", response);
+			fetchCards()
+			alert("card deleted")
+		}).catch((err) => {
+			toast.error("Error deleting card")
+			console.error("error deleting card: ", err);
+		})
 	}
 
 	const onSave = async (id, updateCard) => {
@@ -177,10 +184,13 @@ function DeckCards() {
 				newHint: updateCard.hint
 			})
 
-			alert("card updated successfully")
-			console.log("card updated successfully", response.data);
+			toast.success("card updated successfully")
+			// alert("card updated successfully")
+			// console.log("card updated successfully", response.data);
 		} catch (error) {
-			console.log("error while updating card: ", error);
+			toast.error("Error in updating card")
+			console.error("error while updating card: ", error);
+			// console.log("error while updating card: ", error);
 		}
 	}
 
@@ -188,22 +198,22 @@ function DeckCards() {
 		await fetchCards()
 	}
 
-	const onAnswer = async (flashcard, isCorrect) => {
-		try {
-			const id = flashcard._id
-			const level = flashcard.level
+	// const onAnswer = async (flashcard, isCorrect) => {
+	// 	try {
+	// 		const id = flashcard._id
+	// 		const level = flashcard.level
 
-			await axios.patch(`${url}/flashcard/${id}`, {
-				newLevel: isCorrect ? level + 1 : level - 1
-			})
-				.then((res) => {
-					alert("level updated")
-					console.log(res.data);
-				})
-		} catch (error) {
-			console.error("error while updating level", error);
-		}
-	}
+	// 		await axios.patch(`${url}/flashcard/${id}`, {
+	// 			newLevel: isCorrect ? level + 1 : level - 1
+	// 		})
+	// 			.then((res) => {
+	// 				alert("level updated")
+	// 				console.log(res.data);
+	// 			})
+	// 	} catch (error) {
+	// 		console.error("error while updating level", error);
+	// 	}
+	// }
 
 	return (
 		<div className='mx-auto max-w-7xl px-2 py-6'>
@@ -221,12 +231,19 @@ function DeckCards() {
 							<RefreshCcwIcon />
 						</button>
 						<button
+							className="bg-green-500 text-white px-4 py-2 rounded-lg flex justify-center items-center hover:bg-gray-600 transition"
+							onClick={() => setReview(true)}
+						>
+							<SlidersHorizontal className='w-4 h-4 mr-2' />
+							Review
+						</button>
+						{/* <button
 							className="bg-gray-500 text-white px-4 py-2 rounded-lg flex justify-center items-center hover:bg-gray-600 transition"
 							onClick={() => setFilter(true)}
 						>
 							<SlidersHorizontal className='w-4 h-4 mr-2' />
 							Filter
-						</button>
+						</button> */}
 					</div>
 				</div>
 			</div>
@@ -252,7 +269,7 @@ function DeckCards() {
 				))}
 			</div>
 
-			{filter &&
+			{/* {filter &&
 				<FilterModal
 					filterLevel={filterLevel}
 					setFilterLevel={setFilterLevel}
@@ -266,7 +283,7 @@ function DeckCards() {
 					handleReset={handleReset}
 					handleSubmit={handleSubmit}
 				/>
-			}
+			} */}
 
 			{detail &&
 				<DetailModal
@@ -289,6 +306,14 @@ function DeckCards() {
 				<ReviewCard 
 					flashcard={selectedCard}
 					onOpenChange={setShowCard}
+					refresh={handleRefresh}
+				/>
+			}
+
+			{review &&
+				<ReviewAllCard
+					cards={cards}
+					onOpenChange={setReview}
 					refresh={handleRefresh}
 				/>
 			}

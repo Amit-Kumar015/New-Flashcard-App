@@ -5,6 +5,7 @@ import { Atom, Landmark, Languages, BookOpen, FlaskConical, Cpu, Waves, Palette,
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { getDeckIcon } from "@/lib/deckIcons"
+import { toast } from "react-toastify"
 
 function MyDecks() {
   const url = import.meta.env.VITE_API_URL
@@ -22,13 +23,14 @@ function MyDecks() {
 
     try {
       const response = await axios.get(`${url}/flashcard/decks`)
-      console.log(response.data);
+      // console.log(response.data);
       
-      console.log(response.data.allDecks);
+      // console.log(response.data.allDecks);
       
       setDecks(response.data.allDecks)
     } catch (error) {
-      console.log('Error:', error.message);
+      toast.error("Error in fetching decks")
+      console.error('Errorin fetching decks: ', error);
     } finally {
       setLoading(false)
     }
@@ -37,11 +39,13 @@ function MyDecks() {
   const onDelete = async (deck) => {
     axios.delete(`${url}/flashcard/decks/${deck}`)
     .then((response) => {
+      toast.success("deck deleted successfully")
       fetchDecks()
       console.log("deck deleted: ", response);
-      alert("card deleted")
+      // alert("card deleted")
     }).catch((err) => {
-      console.log("error deleting deck: ", err);
+      toast.error("Error deleting deck")
+      console.error("error deleting deck: ", err);
     })
   }
 

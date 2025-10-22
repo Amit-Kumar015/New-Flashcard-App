@@ -8,6 +8,7 @@ import ReviewCard from '@/components/ReviewCard';
 import axios from 'axios'
 import { SlidersHorizontal, RefreshCcwIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'; 
 
 
 function AllCards() {
@@ -37,18 +38,21 @@ function AllCards() {
       }
       getTag()
     } catch (error) {
-      setErrorMessage(error.response?.data?.error || "Fetching tags failed")
+      toast.error(error.response?.data?.error || "Fetching tags failed")
+      console.error("Fetching tags failed", error);
+      
+      // setErrorMessage(error.response?.data?.error || "Fetching tags failed")
 
-      if (error.response) {
-        console.log('Status:', error.response.status);
-        console.log('Message:', error.response.data.error);
-      }
-      else if (error.request) {
-        console.log('No response received:', error.request);
-      }
-      else {
-        console.log('Error:', error.message);
-      }
+      // if (error.response) {
+      //   console.log('Status:', error.response.status);
+      //   console.log('Message:', error.response.data.error);
+      // }
+      // else if (error.request) {
+      //   console.log('No response received:', error.request);
+      // }
+      // else {
+      //   console.log('Error:', error.message);
+      // }
     }
   }, [])
 
@@ -61,18 +65,22 @@ function AllCards() {
       }
       getDecks()
     } catch (error) {
-      setErrorMessage(error.response?.data?.error || "Fetching decks failed")
+      toast.error(error.response?.data?.error || "Fetching decks failed")
+      console.error("Fetching decks failed", error);
+      
 
-      if (error.response) {
-        console.log('Status:', error.response.status);
-        console.log('Message:', error.response.data.error);
-      }
-      else if (error.request) {
-        console.log('No response received:', error.request);
-      }
-      else {
-        console.log('Error:', error.message);
-      }
+      // setErrorMessage(error.response?.data?.error || "Fetching decks failed")
+
+      // if (error.response) {
+      //   console.log('Status:', error.response.status);
+      //   console.log('Message:', error.response.data.error);
+      // }
+      // else if (error.request) {
+      //   console.log('No response received:', error.request);
+      // }
+      // else {
+      //   console.log('Error:', error.message);
+      // }
     }
   }, [])
 
@@ -85,32 +93,35 @@ function AllCards() {
     try {
       const response = await axios.get(`${url}/flashcard`)
 
-      console.log(response);
-      console.log(response.data);
+      // console.log(response);
+      // console.log(response.data);
 
-      if (response?.data.length == 0) {
-        console.log('No cards found');
-        alert("no cards found")
-      }
-      console.log("actual data: ", response?.data?.data);
-      localStorage.setItem('Cards', JSON.stringify(response?.data?.data))
+      // if (response?.data.length == 0) {
+      //   console.log('No cards found');
+      //   alert("no cards found")
+      // }
+      // console.log("actual data: ", response?.data?.data);
+      // localStorage.setItem('Cards', JSON.stringify(response?.data?.data))
       setCards(response?.data?.data)
 
-      alert('cards fetched successfully')
+      // alert('cards fetched successfully')
     }
     catch (error) {
-      setErrorMessage(error.response?.data?.error || "Fetching cards failed")
+      toast.error(error.response?.data?.error || "Fetching cards failed")
+      console.error("Fetching cards failed: ", error);
+      
+      // setErrorMessage(error.response?.data?.error || "Fetching cards failed")
 
-      if (error.response) {
-        console.log('Status:', error.response.status);
-        console.log('Message:', error.response.data.error);
-      }
-      else if (error.request) {
-        console.log('No response received:', error.request);
-      }
-      else {
-        console.log('Error:', error.message);
-      }
+      // if (error.response) {
+      //   console.log('Status:', error.response.status);
+      //   console.log('Message:', error.response.data.error);
+      // }
+      // else if (error.request) {
+      //   console.log('No response received:', error.request);
+      // }
+      // else {
+      //   console.log('Error:', error.message);
+      // }
     }
   }
 
@@ -128,18 +139,20 @@ function AllCards() {
 
       setCards(response.data?.cards)
     } catch (error) {
-      setErrorMessage(error.response?.data?.error || "Fetching cards failed")
+      toast.error(error.response?.data?.error || "failed to filter cards")
+       console.error("failed to filter cards: ", error);
+      // setErrorMessage(error.response?.data?.error || "Fetching cards failed")
 
-      if (error.response) {
-        console.log('Status:', error.response.status);
-        console.log('Message:', error.response.data.error);
-      }
-      else if (error.request) {
-        console.log('No response received:', error.request);
-      }
-      else {
-        console.log('Error:', error.message);
-      }
+      // if (error.response) {
+      //   console.log('Status:', error.response.status);
+      //   console.log('Message:', error.response.data.error);
+      // }
+      // else if (error.request) {
+      //   console.log('No response received:', error.request);
+      // }
+      // else {
+      //   console.log('Error:', error.message);
+      // }
     }
     setFilter(false)
   }
@@ -153,11 +166,13 @@ function AllCards() {
   const onDelete = async (id) => {
     axios.delete(`${url}/flashcard/${id}`)
     .then((response) => {
+      toast.success("Card deleted successfully")
       fetchCards()
       console.log("card deleted: ", response);
-      alert("card deleted")
+      // alert("card deleted")
     }).catch((err) => {
-      console.log("error deleting card: ", err);
+      toast.error("Error deleting card")
+      console.error("error deleting card: ", err);
     })
   }
 
@@ -172,10 +187,12 @@ function AllCards() {
         newHint: updateCard.hint
       })
       
-      alert("card updated successfully")
-      console.log("card updated successfully", response.data);
+      toast.success("card updated successfully")
+      // alert("card updated successfully")
+      // console.log("card updated successfully", response.data);
     } catch (error) {
-      console.log("error while updating card: ", error);      
+      toast.error("Error in updating card")
+      console.error("error while updating card: ", error);      
     }
   }
 
@@ -210,10 +227,12 @@ function AllCards() {
         hint: hint.trim()
       })
       .then((res) => {
-        alert("card created")
-        console.log(res.data);
+        toast.success("Card created successfully")
+        // alert("card created")
+        // console.log(res.data);
       })
     } catch (error) {
+      toast.error("Error in creating card")
       console.error("error while creating card", error);
     }
   }
@@ -297,13 +316,6 @@ function AllCards() {
         />
       }
 
-      {/* remove this and add reviewcard like in pending cards */}
-      {/* { showCard && 
-        <PracticeCard
-          flashcard={selectedCard}
-          onAnswer={onAnswer}
-        />
-      } */}
       { showCard && 
         <ReviewCard
           flashcard={selectedCard}

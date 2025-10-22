@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Edit, Save, X } from "lucide-react"
+import { toast } from "react-toastify"
 
 export default function EditModal({flashcard, open, onOpenChange, onSave, refresh}){
     const [newQuestion, setNewQuestion] = useState("")
@@ -44,7 +45,8 @@ export default function EditModal({flashcard, open, onOpenChange, onSave, refres
 
     const handleSave = async () => {
         if(!newQuestion.trim() || !newAnswer.trim()){
-            alert("question and answer are required")
+            toast.warn("question and answer are required")
+            // alert("question and answer are required")
             return
         }
 
@@ -67,8 +69,9 @@ export default function EditModal({flashcard, open, onOpenChange, onSave, refres
             refresh()
             onOpenChange(false)
         } catch (error) {
+            toast.error("Error saving flashcard")
             console.error("Error saving flashcard:", error)
-            alert("Failed to save flashcard. Please try again.")
+            // alert("Failed to save flashcard. Please try again.")
         } finally{
             setIsLoading(false)
         }

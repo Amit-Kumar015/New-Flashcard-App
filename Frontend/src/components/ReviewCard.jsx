@@ -3,6 +3,7 @@ import { Button } from './ui/button';
 import { PracticeCard } from './PracticeCard';
 import { X } from 'lucide-react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function ReviewCard({flashcard, onOpenChange, refresh}) {
     const url = import.meta.env.VITE_API_URL
@@ -18,11 +19,13 @@ function ReviewCard({flashcard, onOpenChange, refresh}) {
             })
             // refresh
             refresh()
+            toast.success("Reviewed all cards!")
             // close modal
             onOpenChange(false)
-            alert("reviewed card")
+            // alert("reviewed card")
 
         } catch (error) {
+            toast.error("Error in updating level")
             console.error("error while updating level", error);
         }
     }

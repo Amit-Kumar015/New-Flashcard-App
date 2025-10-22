@@ -15,7 +15,7 @@ ON PROGRESS:
 -- HOME PAGE - done
 -- creating card - done
 -- DECK PAGE - done
--- testing - deleting decks not deletingits cards
+-- testing - deleting decks not deletingits cards - done
 -- error handling
 -- clean up
 -- integrate ai

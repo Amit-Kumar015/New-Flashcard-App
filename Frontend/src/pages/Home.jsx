@@ -8,81 +8,9 @@ import Deck from '@/components/Deck';
 import { getDeckIcon } from '@/lib/deckIcons';
 import { Bar } from 'react-chartjs-2';
 import { options } from '@/lib/charts';
+// import { toast } from "sonner"
+import { toast } from 'react-toastify';
 
-// const dashboardStats = {
-//   pendingCards: 42,
-//   totalCards: 350,
-//   decks: 8,
-//   masteryPercentage: 65,
-// };
-
-// const recentDecks = [
-//   { name: "React Hooks", pending: 5, total: 30, url: "/decks/react-hooks" },
-//   { name: "CSS Flexbox", pending: 0, total: 20, url: "/decks/css-flexbox" },
-//   { name: "MongoDB Queries", pending: 12, total: 50, url: "/decks/mongodb-queries" },
-// ];
-
-// const levelData = [
-//   { level: 1, pending: 15, mastered: 5 },
-//   { level: 2, pending: 10, mastered: 15 },
-//   { level: 3, pending: 5, mastered: 30 },
-//   { level: 4, pending: 2, mastered: 55 },
-//   { level: 5, pending: 0, mastered: 150 },
-// ];
-// // --- End Placeholder Data ---
-
-
-// // Helper component for the Mastery/Progress Bar
-// const ProgressBar = ({ percentage }) => (
-//   <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
-//     <div
-//       className="bg-green-500 h-2.5 rounded-full transition-all duration-500"
-//       style={{ width: `${percentage}%` }}
-//       aria-valuenow={percentage}
-//       aria-valuemin="0"
-//       aria-valuemax="100"
-//     ></div>
-//   </div>
-// );
-
-// // Helper component for the Bar Chart (simplistic Tailwind implementation)
-// const CardLevelChart = () => (
-//   <Card className="col-span-1 md:col-span-2 shadow-lg">
-//     <CardHeader className="flex flex-row items-center justify-between">
-//       <CardTitle className="text-xl">Progress By Level</CardTitle>
-//       <Database className="h-5 w-5 text-gray-400" />
-//     </CardHeader>
-//     <CardContent>
-//       <div className="h-60 flex items-end justify-between space-x-2">
-//         {levelData.map((d, index) => (
-//           <div key={d.level} className="flex flex-col items-center flex-1">
-//             {/* Bars */}
-//             <div className="flex flex-row items-end h-full w-full space-x-1">
-//               {/* Pending Bar */}
-//               <div
-//                 className="w-1/2 bg-yellow-400 rounded-t-sm transition-all duration-500"
-//                 style={{ height: `${(d.pending / 20) * 100}%` }} // Max height based on largest 'pending' (15)
-//                 title={`Level ${d.level} Pending: ${d.pending}`}
-//               ></div>
-//               {/* Mastered Bar */}
-//               <div
-//                 className="w-1/2 bg-green-500 rounded-t-sm transition-all duration-500"
-//                 style={{ height: `${(d.mastered / 150) * 100}%` }} // Max height based on largest 'mastered' (150)
-//                 title={`Level ${d.level} Mastered: ${d.mastered}`}
-//               ></div>
-//             </div>
-//             {/* Label */}
-//             <span className="text-xs font-semibold mt-1">L{d.level}</span>
-//           </div>
-//         ))}
-//       </div>
-//       <div className="flex justify-center text-sm mt-3 space-x-4">
-//         <span className="flex items-center"><div className="w-3 h-3 bg-yellow-400 mr-1 rounded-sm"></div>Pending</span>
-//         <span className="flex items-center"><div className="w-3 h-3 bg-green-500 mr-1 rounded-sm"></div>Mastered</span>
-//       </div>
-//     </CardContent>
-//   </Card>
-// );
 const INITIAL_LEVEL_DATA = [
   { level: 1, pending: 0, mastered: 0 },
   { level: 2, pending: 0, mastered: 0 },
@@ -126,7 +54,7 @@ const dataset = (cards, initialLevelData) => {
     newDashboardStats: {
       pendingCards,
       totalCards,
-      masteryPercentage
+      masteryPercentage: masteryPercentage.toFixed(1)
     },
     newLevelData
   };
@@ -159,24 +87,34 @@ export default function Home() {
         }
 
         setDashboardStats(finalDashboardstat)
-        console.log("dashboard stats ", finalDashboardstat);
+        if(finalDashboardstat.pendingCards > 0){
+          toast.info(`You have ${finalDashboardstat.pendingCards} cards pending review today!`);
+        }
+        else{
+          toast.success("All caught up! No pending cards.");
+        }
+        // console.log("dashboard stats ", finalDashboardstat);
 
         setLevelData(newLevelData)
       }
       else {
+        // toast.warn("No flashcards found in your library.");
         setDashboardStats({
           pendingCards: 0,
           totalCards: 0,
           masteryPercentage: 0,
           decks: 0
         })
-
+        // console.log("toast:" , dashboardStats.pendingCards);
+        
+        // toast(`Pending Cards: ${dashboardStats.pendingCards}`)
+        // dashboardStats.pendingCards > 0 && toast.info(`Pending Cards: ${dashboardStats.pendingCards}`)
         setLevelData(INITIAL_LEVEL_DATA)
       }
     }
 
     loadData()
-    console.log("dashboardStats", dashboardStats);
+    // console.log("dashboardStats", dashboardStats);
   }, [cards.length])
 
   const fetchDecks = async () => {
@@ -184,13 +122,14 @@ export default function Home() {
 
     try {
       const response = await axios.get(`${url}/flashcard/decks`)
-      console.log(response.data);
+      // console.log(response.data);
 
-      console.log(response.data.allDecks);
+      // console.log(response.data.allDecks);
 
       setDecks(response.data.allDecks)
       return response.data.allDecks
     } catch (error) {
+      toast.error("Error in fetching decks")
       console.log('Error:', error.message);
     } finally {
       setLoading(false)
@@ -202,42 +141,45 @@ export default function Home() {
     try {
       const response = await axios.get(`${url}/flashcard`)
 
-      console.log(response);
-      console.log(response.data);
+      // console.log(response);
+      // console.log(response.data);
 
-      if (response?.data.length == 0) {
-        console.log('No cards found');
-        alert("no cards found")
-      }
-      console.log("actual data: ", response?.data?.data);
-      localStorage.setItem('Cards', JSON.stringify(response?.data?.data))
+      // if (response?.data.length == 0) {
+      //   console.log('No cards found');
+      //   alert("no cards found")
+      // }
+      // console.log("actual data: ", response?.data?.data);
+      // localStorage.setItem('Cards', JSON.stringify(response?.data?.data))
       setCards(response?.data?.data)
 
-      alert('cards fetched successfully')
+      // alert('cards fetched successfully')
     }
     catch (error) {
-      setErrorMessage(error.response?.data?.error || "Fetching cards failed")
+      toast.error(error.response?.data?.error || "Fetching cards failed")
+      // setErrorMessage(error.response?.data?.error || "Fetching cards failed")
 
-      if (error.response) {
-        console.log('Status:', error.response.status);
-        console.log('Message:', error.response.data.error);
-      }
-      else if (error.request) {
-        console.log('No response received:', error.request);
-      }
-      else {
-        console.log('Error:', error.message);
-      }
+      // if (error.response) {
+      //   console.log('Status:', error.response.status);
+      //   console.log('Message:', error.response.data.error);
+      // }
+      // else if (error.request) {
+      //   console.log('No response received:', error.request);
+      // }
+      // else {
+      //   console.log('Error:', error.message);
+      // }
     }
   }
 
   const onDelete = async (deck) => {
     axios.delete(`${url}/flashcard/decks/${deck}`)
       .then((response) => {
+        toast.success(`${deck} Deck deleted successfully`)
+        // console.log("deck deleted: ", response.data);
         fetchDecks()
-        console.log("deck deleted: ", response);
-        alert("card deleted")
+        // alert("card deleted")
       }).catch((err) => {
+        toast.error("Error in deleting deck!")
         console.log("error deleting deck: ", err);
       })
   }
