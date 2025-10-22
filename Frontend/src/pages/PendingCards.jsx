@@ -2,7 +2,6 @@ import { DetailModal } from '@/components/DetailModal';
 import EditModal from '@/components/EditModal';
 import FilterModal from '@/components/FilterModal';
 import Flashcard from '@/components/Flashcard'
-import { PracticeCard } from '@/components/PracticeCard';
 import ReviewAllCard from '@/components/ReviewAllCard';
 import ReviewCard from '@/components/ReviewCard';
 
@@ -14,11 +13,9 @@ import { toast } from 'react-toastify';
 
 function PendingCards() {
   const url = import.meta.env.VITE_API_URL
-  const token = localStorage.getItem('token')
   const [cards, setCards] = useState([])
   const [tag, settag] = useState([])
   const [deck, setDeck] = useState([])
-  const [errorMessage, setErrorMessage] = useState('')
   const [filter, setFilter] = useState(false)
   const [edit, setEdit] = useState(false)
   const [detail, setDetail] = useState(false)
@@ -39,22 +36,9 @@ function PendingCards() {
       } catch (error) {
         toast.error(error.response?.data?.error || "Fetching tags failed")
         console.error("Fetching tags failed ", error);
-        
-        // setErrorMessage(error.response?.data?.error || "Fetching tags failed")
-
-        // if (error.response) {
-        //   console.log('Status:', error.response.status);
-        //   console.log('Message:', error.response.data.error);
-        // }
-        // else if (error.request) {
-        //   console.log('No response received:', error.request);
-        // }
-        // else {
-        //   console.log('Error:', error.message);
-        // }
       }
-
     }
+
     getTag()
   }, [])
 
@@ -66,18 +50,6 @@ function PendingCards() {
       } catch (error) {
         toast.error(error.response?.data?.error || "Fetching decks failed")
         console.error("Fetching decks failed ", error);
-        // setErrorMessage(error.response?.data?.error || "Fetching decks failed")
-        
-        // if (error.response) {
-        //   console.log('Status:', error.response.status);
-        //   console.log('Message:', error.response.data.error);
-        // }
-        // else if (error.request) {
-        //   console.log('No response received:', error.request);
-        // }
-        // else {
-        //   console.log('Error:', error.message);
-        // }
       }
     }
 
@@ -89,38 +61,13 @@ function PendingCards() {
   }, [])
 
   const fetchCards = async () => {
-    setErrorMessage('')
     try {
       const response = await axios.get(`${url}/flashcard/pending`)
-
-      // console.log(response);
-      // console.log(response.data);
-
-      // if (response?.data.length == 0) {
-      //   console.log('No cards found');
-      //   alert("no cards found")
-      // }
-      // console.log("actual data: ", response?.data?.data);
-      // localStorage.setItem('Cards', JSON.stringify(response?.data?.data))
       setCards(response?.data?.data)
-
-      // alert('cards fetched successfully')
     }
     catch (error) {
       toast.error(error.response?.data?.error || "Fetching cards failed")
       console.error("Fetching cards failed: ", error);
-      // setErrorMessage(error.response?.data?.error || "Fetching cards failed")
-
-      // if (error.response) {
-      //   console.log('Status:', error.response.status);
-      //   console.log('Message:', error.response.data.error);
-      // }
-      // else if (error.request) {
-      //   console.log('No response received:', error.request);
-      // }
-      // else {
-      //   console.log('Error:', error.message);
-      // }
     }
   }
 
@@ -140,18 +87,6 @@ function PendingCards() {
     } catch (error) {
       toast.error(error.response?.data?.error || "failed to filter cards")
       console.error("failed to filter cards: ", error);
-      // setErrorMessage(error.response?.data?.error || "Fetching cards failed")
-
-      // if (error.response) {
-      //   console.log('Status:', error.response.status);
-      //   console.log('Message:', error.response.data.error);
-      // }
-      // else if (error.request) {
-      //   console.log('No response received:', error.request);
-      // }
-      // else {
-      //   console.log('Error:', error.message);
-      // }
     }
     setFilter(false)
   }
@@ -167,8 +102,8 @@ function PendingCards() {
       .then((response) => {
         toast.success("Card deleted successfully")
         console.log("card deleted: ", response);
+
         fetchCards()
-        // alert("card deleted")
       }).catch((err) => {
         toast.error("Error deleting card")
         console.error("error deleting card: ", err);
@@ -187,15 +122,13 @@ function PendingCards() {
       })
 
       toast.success("card updated successfully")
-      // alert("card updated successfully")
-      // console.log("card updated successfully", response.data);
+      console.log("card updated successfully", response.data);
     } catch (error) {
       toast.error("Error in updating card")
       console.error("error while updating card: ", error); 
     }
   }
 
-  // dont store cards in localstorage need to call api again
   const handleRefresh = async () => {
     await fetchCards()
   }
@@ -278,8 +211,6 @@ function PendingCards() {
           refresh={handleRefresh}
         />
       }
-
-      {/* need to make new file for the lower screen of the practice card send card, and setopen same logic like reviewallcard */}
 
       {showCard &&
         <ReviewCard

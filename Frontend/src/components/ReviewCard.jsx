@@ -13,17 +13,13 @@ function ReviewCard({flashcard, onOpenChange, refresh}) {
         const level = flashcard.level
 
         try {
-            // update
             await axios.patch(`${url}/flashcard/${id}`, {
                 newLevel: isCorrect ? level+1 : level-1
             })
-            // refresh
+            
             refresh()
             toast.success("Reviewed all cards!")
-            // close modal
             onOpenChange(false)
-            // alert("reviewed card")
-
         } catch (error) {
             toast.error("Error in updating level")
             console.error("error while updating level", error);

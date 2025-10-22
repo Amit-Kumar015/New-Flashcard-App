@@ -1,7 +1,4 @@
-// newQuestion, newAnswer, newLevel, newTag, newDeck, newHint
-
 import { useState, useEffect } from "react"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -46,7 +43,6 @@ export default function EditModal({flashcard, open, onOpenChange, onSave, refres
     const handleSave = async () => {
         if(!newQuestion.trim() || !newAnswer.trim()){
             toast.warn("question and answer are required")
-            // alert("question and answer are required")
             return
         }
 
@@ -71,7 +67,6 @@ export default function EditModal({flashcard, open, onOpenChange, onSave, refres
         } catch (error) {
             toast.error("Error saving flashcard")
             console.error("Error saving flashcard:", error)
-            // alert("Failed to save flashcard. Please try again.")
         } finally{
             setIsLoading(false)
         }

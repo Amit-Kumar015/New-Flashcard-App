@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Assuming you use react-router-dom
-import { Button } from "@/components/ui/button"; // Assuming shadcn button
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Assuming shadcn cards
+import { useNavigate } from 'react-router-dom'; 
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; 
 import { BookOpen, Zap, Database, ChevronRight } from 'lucide-react';
 import axios from 'axios';
 import Deck from '@/components/Deck';
 import { getDeckIcon } from '@/lib/deckIcons';
 import { Bar } from 'react-chartjs-2';
 import { options } from '@/lib/charts';
-// import { toast } from "sonner"
 import { toast } from 'react-toastify';
 
 const INITIAL_LEVEL_DATA = [
@@ -22,19 +21,15 @@ const INITIAL_LEVEL_DATA = [
 const dataset = (cards, initialLevelData) => {
   const now = Date.now();
 
-  // 2. Use 'let' for counters
   let pendingCards = 0;
   let totalCards = 0;
 
-  // 3. Create a clean copy of levelData to mutate locally
   const newLevelData = initialLevelData.map(d => ({ ...d }));
 
-  // 4. Use forEach for iteration
   cards.forEach((card) => {
     const reviewTimestamp = new Date(card.reviewDate).getTime();
     const levelIndex = card.level - 1;
 
-    // Safety check for valid level
     if (now < reviewTimestamp) {
       newLevelData[levelIndex].mastered += 1;
     }
@@ -49,7 +44,6 @@ const dataset = (cards, initialLevelData) => {
   const masteryCards = totalCards - pendingCards;
   const masteryPercentage = totalCards > 0 ? (masteryCards / totalCards) * 100 : 0;
 
-  // 5. Return both the stats and the new level data
   return {
     newDashboardStats: {
       pendingCards,
@@ -67,11 +61,8 @@ export default function Home() {
   const [decks, setDecks] = useState([])
   const [dashboardStats, setDashboardStats] = useState({})
   const [levelData, setLevelData] = useState(INITIAL_LEVEL_DATA);
-  const [errorMessage, setErrorMessage] = useState('')
-  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
 
-  const labels = ['1', '2', '3', '4', '5']
 
   useEffect(() => {
     const loadData = async () => {
@@ -93,81 +84,43 @@ export default function Home() {
         else{
           toast.success("All caught up! No pending cards.");
         }
-        // console.log("dashboard stats ", finalDashboardstat);
 
         setLevelData(newLevelData)
       }
       else {
-        // toast.warn("No flashcards found in your library.");
         setDashboardStats({
           pendingCards: 0,
           totalCards: 0,
           masteryPercentage: 0,
           decks: 0
         })
-        // console.log("toast:" , dashboardStats.pendingCards);
-        
-        // toast(`Pending Cards: ${dashboardStats.pendingCards}`)
-        // dashboardStats.pendingCards > 0 && toast.info(`Pending Cards: ${dashboardStats.pendingCards}`)
         setLevelData(INITIAL_LEVEL_DATA)
       }
     }
 
     loadData()
-    // console.log("dashboardStats", dashboardStats);
   }, [cards.length])
 
   const fetchDecks = async () => {
-    setLoading(true)
-
     try {
       const response = await axios.get(`${url}/flashcard/decks`)
-      // console.log(response.data);
-
-      // console.log(response.data.allDecks);
-
       setDecks(response.data.allDecks)
+
       return response.data.allDecks
     } catch (error) {
       toast.error("Error in fetching decks")
       console.log('Error:', error.message);
-    } finally {
-      setLoading(false)
     }
   }
 
   const fetchCards = async () => {
-    setErrorMessage('')
     try {
       const response = await axios.get(`${url}/flashcard`)
-
-      // console.log(response);
-      // console.log(response.data);
-
-      // if (response?.data.length == 0) {
-      //   console.log('No cards found');
-      //   alert("no cards found")
-      // }
-      // console.log("actual data: ", response?.data?.data);
-      // localStorage.setItem('Cards', JSON.stringify(response?.data?.data))
       setCards(response?.data?.data)
-
-      // alert('cards fetched successfully')
     }
     catch (error) {
       toast.error(error.response?.data?.error || "Fetching cards failed")
-      // setErrorMessage(error.response?.data?.error || "Fetching cards failed")
-
-      // if (error.response) {
-      //   console.log('Status:', error.response.status);
-      //   console.log('Message:', error.response.data.error);
-      // }
-      // else if (error.request) {
-      //   console.log('No response received:', error.request);
-      // }
-      // else {
-      //   console.log('Error:', error.message);
-      // }
+      console.error("Fetching cards failed", error);
     }
   }
 
@@ -175,9 +128,7 @@ export default function Home() {
     axios.delete(`${url}/flashcard/decks/${deck}`)
       .then((response) => {
         toast.success(`${deck} Deck deleted successfully`)
-        // console.log("deck deleted: ", response.data);
         fetchDecks()
-        // alert("card deleted")
       }).catch((err) => {
         toast.error("Error in deleting deck!")
         console.log("error deleting deck: ", err);

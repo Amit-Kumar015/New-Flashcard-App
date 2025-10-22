@@ -1,7 +1,5 @@
-import react, { useEffect, useMemo, useState } from "react"
-import { Button } from "@/components/ui/button"
+import React, { useEffect, useState } from "react"
 import Deck from "@/components/Deck"
-import { Atom, Landmark, Languages, BookOpen, FlaskConical, Cpu, Waves, Palette, Globe } from "lucide-react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { getDeckIcon } from "@/lib/deckIcons"
@@ -10,7 +8,6 @@ import { toast } from "react-toastify"
 function MyDecks() {
   const url = import.meta.env.VITE_API_URL
   const [decks, setDecks] = useState([])
-  const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate()
 
@@ -19,20 +16,12 @@ function MyDecks() {
   }, [])
 
   const fetchDecks = async () => {
-    setLoading(true)
-
     try {
       const response = await axios.get(`${url}/flashcard/decks`)
-      // console.log(response.data);
-      
-      // console.log(response.data.allDecks);
-      
       setDecks(response.data.allDecks)
     } catch (error) {
       toast.error("Error in fetching decks")
       console.error('Errorin fetching decks: ', error);
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -40,9 +29,9 @@ function MyDecks() {
     axios.delete(`${url}/flashcard/decks/${deck}`)
     .then((response) => {
       toast.success("deck deleted successfully")
-      fetchDecks()
       console.log("deck deleted: ", response);
-      // alert("card deleted")
+
+      fetchDecks()
     }).catch((err) => {
       toast.error("Error deleting deck")
       console.error("error deleting deck: ", err);
@@ -57,11 +46,8 @@ function MyDecks() {
     <div className="min-h-screen bg-slate-50">
       <div className="mx-auto max-w-7xl px-4 py-5 md:px-8">
         <div className="flex gap-6">
-          {/* Sidebar */}
 
-          {/* Content */}
           <section className="flex-1">
-            {/* Header */}
             <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-slate-900">My Decks</h1>
@@ -69,7 +55,6 @@ function MyDecks() {
               </div>
             </div>
 
-            {/* Grid */}
             <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 xl:grid-cols-4">
               {decks.map((d, i) => (
                 <Deck

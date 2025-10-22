@@ -22,10 +22,7 @@ function Login() {
       ...formData,
       [e.target.name]: e.target.value
     })    
-  }
-
-  console.log("env:" , import.meta.env.VITE_API_URL);
-  
+  }  
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -44,24 +41,21 @@ function Login() {
           token: response.data?.token
         }
       }))
-      toast.success("Logged in successfully")
       navigate('/')
-    } catch (error) {
-      toast.error(error.response?.data?.error || "Login failed")
-      console.error("login failed: ", error);
+      toast.success("Logged in successfully")
+    } catch (error) {      
+      setErrorMessage(error.response?.data?.error || "Login failed")
       
-      // setErrorMessage(error.response?.data?.error || "Login failed")
-      
-      // if(error.response){
-      //   console.log('Status:', error.response.status);   
-      //   console.log('Message:', error.response.data.error);    
-      // }
-      // else if(error.request){
-      //   console.log('No response received:', error.request);
-      // }
-      // else{
-      //   console.log('Error:', error.message);
-      // }    
+      if(error.response){
+        console.log('Status:', error.response.status);   
+        console.log('Message:', error.response.data.error);    
+      }
+      else if(error.request){
+        console.log('No response received:', error.request);
+      }
+      else{
+        console.log('Error:', error.message);
+      }    
       setLoading(false)
     }
   }

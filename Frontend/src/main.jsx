@@ -13,7 +13,6 @@ import Home from './pages/Home.jsx'
 import PendingCards from './pages/PendingCards.jsx'
 import MyDecks from './pages/MyDecks.jsx'
 import DeckCards from './pages/DeckCards'
-// import { Toaster } from './components/ui/sonner'
 import { ToastContainer } from 'react-toastify';
 
 
@@ -35,7 +34,6 @@ const router = createBrowserRouter(
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {/* <Toaster/> */}
     <Provider store={store}>
     <RouterProvider router={router}/>
     </Provider>

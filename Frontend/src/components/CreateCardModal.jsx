@@ -3,9 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-// import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Plus, X } from 'lucide-react'
 import { toast } from 'react-toastify'
 
@@ -74,7 +72,6 @@ function CreateCardModal({ onOpenChange, onSubmit, handleRefresh }) {
 			<Card className="w-full max-w-2xl max-h-[90vh] mx-auto">
 				<CardHeader>
 					<CardTitle className="flex items-center gap-2 text-2xl">
-						{/* <Plus className="w-6 h-6" /> */}
 						Create New Flashcard
 					</CardTitle>
 					<CardDescription>Fill in the details below to create a new flashcard</CardDescription>
@@ -82,7 +79,6 @@ function CreateCardModal({ onOpenChange, onSubmit, handleRefresh }) {
 
 				<CardContent>
 					<form onSubmit={handleSubmit} className="space-y-6">
-						{/* Question */}
 						<div className="space-y-2">
 							<Label htmlFor="question" className="text-lg font-semibold">
 								Question *
@@ -102,7 +98,6 @@ function CreateCardModal({ onOpenChange, onSubmit, handleRefresh }) {
 							{errors.question && <p className="text-sm text-red-500">{errors.question}</p>}
 						</div>
 
-						{/* Answer */}
 						<div className="space-y-2">
 							<Label htmlFor="answer" className="text-lg font-semibold">
 								Answer *
@@ -122,7 +117,6 @@ function CreateCardModal({ onOpenChange, onSubmit, handleRefresh }) {
 							{errors.answer && <p className="text-sm text-red-500">{errors.answer}</p>}
 						</div>
 
-						{/* Hint */}
 						<div className="space-y-2">
 							<Label htmlFor="hint" className="text-lg font-semibold">
 								Hint (Optional)
@@ -136,7 +130,6 @@ function CreateCardModal({ onOpenChange, onSubmit, handleRefresh }) {
 							<p className="text-xs text-muted-foreground">This will be shown when studying</p>
 						</div>
 
-						{/* Grid: Deck and Level */}
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 							{/* Deck */}
 							<div className="space-y-2">
@@ -157,26 +150,9 @@ function CreateCardModal({ onOpenChange, onSubmit, handleRefresh }) {
 								{errors.deck && <p className="text-sm text-red-500">{errors.deck}</p>}
 							</div>
 
-							{/* Level */}
-							{/* <div className="space-y-2">
-								<Label htmlFor="level" className="text-base font-semibold">
-									Level *
-								</Label>
-								<Select value={level} onValueChange={setLevel}>
-									<SelectTrigger id="level">
-										<SelectValue placeholder="Select level" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="Beginner">Beginner</SelectItem>
-										<SelectItem value="Intermediate">Intermediate</SelectItem>
-										<SelectItem value="Advanced">Advanced</SelectItem>
-									</SelectContent>
-								</Select>
-								{errors.level && <p className="text-sm text-red-500">{errors.level}</p>}
-							</div> */}
+							
 						</div>
 
-						{/* Tags */}
 						<div className="space-y-2">
 							<Label htmlFor="tag" className="text-lg font-semibold">
 								Tags (Optional)
@@ -189,12 +165,10 @@ function CreateCardModal({ onOpenChange, onSubmit, handleRefresh }) {
 							/>
 						</div>
 
-						{/* Error Message */}
 						{errors.submit && (
 							<div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-sm">{errors.submit}</div>
 						)}
 
-						{/* Buttons */}
 						<div className="flex gap-3 justify-end pt-4 border-t">
 							<Button
 								type="button"
