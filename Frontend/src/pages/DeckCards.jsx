@@ -4,7 +4,7 @@ import Flashcard from '@/components/Flashcard'
 import ReviewAllCard from '@/components/ReviewAllCard';
 import ReviewCard from '@/components/ReviewCard';
 import axios from 'axios'
-import { SlidersHorizontal, RefreshCcwIcon } from 'lucide-react';
+import { Repeat, RefreshCcwIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -87,10 +87,10 @@ function DeckCards() {
 							<RefreshCcwIcon />
 						</button>
 						<button
-							className="bg-green-500 text-white px-4 py-2 rounded-lg flex justify-center items-center hover:bg-gray-600 transition"
+							className="bg-green-500 text-white px-4 py-2 rounded-lg flex justify-center items-center hover:bg-green-600 transition"
 							onClick={() => setReview(true)}
 						>
-							<SlidersHorizontal className='w-4 h-4 mr-2' />
+							<Repeat className='w-4 h-4 mr-2' />
 							Review
 						</button>
 					</div>

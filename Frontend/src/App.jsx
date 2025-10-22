@@ -1,54 +1,91 @@
 import React from "react";
 import { Outlet } from "react-router-dom"
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { Home, NotebookText, Repeat, Layers, Bug } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import axios from "axios";
+import { cn } from "@/lib/utils";
 
 function App() {
   const navItems = [
     {
       name: "Home",
-      url: "/"
+      url: "/",
+      icon: Home
     },
     {
       name: "All Cards",
-      url: "/all-cards"
+      url: "/all-cards",
+      icon: NotebookText
     },
     {
       name: "Pending Cards",
-      url: "/pending-cards"
+      url: "/pending-cards",
+      icon: Repeat
     },
     {
       name: "My Decks",
-      url: "my-decks"
+      url: "/my-decks",
+      icon: Layers
     }
-  ]
+  ];
 
   const navigate = useNavigate()
+  const location = useLocation()
   const token = localStorage.getItem("userToken")
   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
 
   return (
     <div className="w-screen h-screen flex flex-col relative overflow-x-hidden">
-    <Header />
+      <Header />
 
-    <div className="flex flex-1">
-      <div className="w-1/6 bg-gray-100 border-r p-4 shadow-md">
-        <h2 className="text-xl font-semibold mb-4">Navigation</h2>
-        <ul className="space-y-2">
-        {navItems.map((item) => (
-          <li key={item.name} className="cursor-pointer text-lg hover:text-green-600" onClick={() => navigate(item.url)}>{item.name}</li>
-        ))}
-        </ul>
-      </div>
+      <div className="flex flex-1 overflow-hidden">
+        <aside className="hidden md:block w-60 p-4 shrink-0">
+          <nav className="sticky top-8 flex flex-col h-[calc(100vh-8rem)] p-2 justify-between">
+            <div className="space-y-3">
+              {navItems.map((item) => {
+                const isActive = location.pathname === item.url;
+                const IconComponent = item.icon;
 
-      <div className="w-5/6 p-6 overflow-y-auto">
-        <Outlet/>
+                return (
+                  <button
+                    key={item.name}
+                    onClick={() => navigate(item.url)}
+
+                    className={cn(
+                      "w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+                      "text-gray-600 hover:bg-gray-100",
+                      isActive && "bg-green-600 text-white hover:bg-green-700"
+                    )}
+                  >
+                    <IconComponent className="h-4 w-4" />
+                    <span className="truncate">{item.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="mt-4">
+              <button
+                className={cn(
+                  "w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+                  "text-white bg-red-600 hover:bg-red-500",
+                )}
+                onClick={() => window.open('https://github.com/Amit-Kumar015/New-Flashcard-App/issues', '_blank')}
+              >
+                <Bug className="h-4 w-4" />
+                <span className="truncate">Report Bug</span>
+              </button>
+            </div>
+          </nav>
+        </aside>
+
+        <div className="w-5/6 p-6 overflow-y-auto">
+          <Outlet />
+        </div>
       </div>
     </div>
-  </div>
   )
 }
 

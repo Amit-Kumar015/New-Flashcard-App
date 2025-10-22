@@ -5,7 +5,7 @@ import FilterModal from '@/components/FilterModal';
 import Flashcard from '@/components/Flashcard'
 import ReviewCard from '@/components/ReviewCard';
 import axios from 'axios'
-import { SlidersHorizontal, RefreshCcwIcon } from 'lucide-react';
+import { SlidersHorizontal, CirclePlus, RefreshCcwIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'; 
 
@@ -162,10 +162,10 @@ function AllCards() {
             Filter
           </button>
           <button
-            className="bg-gray-500 text-white px-4 py-2 rounded-lg flex justify-center items-center hover:bg-gray-600 transition"
+            className="bg-green-500 text-white px-4 py-2 rounded-lg flex justify-center items-center hover:bg-green-600 transition"
             onClick={() => setCreate(true)}
           >
-            <SlidersHorizontal className='w-4 h-4 mr-2' />
+            <CirclePlus className='w-4 h-4 mr-2' />
             Create
           </button>
         </div>

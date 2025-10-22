@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom";
 import { logout } from "../store/authSlice";
 import axios from "axios";
+import light_logo from "../assets/light_theme_logo.png"
 
 const Header = () => {
     const isLoggedIn = useSelector(state => state.auth.status)
@@ -18,9 +19,8 @@ const Header = () => {
 
     return (
         <div className="bg-gray-50 flex items-center justify-between px-6 py-4 shadow-md">
-            <div className="flex items-center space-x-2">
-                <img src="#" alt="logo" className="w-12 h-12 object-contain" />
-                <span className="text-xl font-semibold text-gray-800">YourApp</span>
+            <div className="flex items-center space-x-2 h-12" onClick={() => navigate('/')}>
+                <img src={light_logo} alt="logo" className="w-32 object-contain" />
             </div>
 
             {isLoggedIn ? (
