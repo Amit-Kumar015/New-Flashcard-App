@@ -5,7 +5,6 @@ import './index.css'
 import App from './App.jsx'
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import store from './store/store.js'
 import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
 import AllCards from './pages/AllCards.jsx'
@@ -14,6 +13,8 @@ import PendingCards from './pages/PendingCards.jsx'
 import MyDecks from './pages/MyDecks.jsx'
 import DeckCards from './pages/DeckCards'
 import { ToastContainer } from 'react-toastify';
+import { PersistGate } from 'redux-persist/integration/react'
+import store, {persistor} from './store/store'
 
 
 const router = createBrowserRouter(
@@ -35,7 +36,9 @@ const router = createBrowserRouter(
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
-    <RouterProvider router={router}/>
+      <PersistGate loading={null} persistor={persistor}>
+        <RouterProvider router={router}/>
+      </PersistGate>
     </Provider>
     <ToastContainer 
       position="top-right"
