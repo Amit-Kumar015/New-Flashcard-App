@@ -8,7 +8,7 @@ app.use(cookieParser())
 
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
-    Credential: true    
+    credentials: true    
 }))
 
 // routes
