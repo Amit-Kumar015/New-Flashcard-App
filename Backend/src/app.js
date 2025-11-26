@@ -12,10 +12,10 @@ app.use(cors({
 }))
 
 // routes
-import flashcardRouter from "./routes/flashcard.js"
-import userRouter from './routes/User.js'
+import cardRouter from "./routes/card.route.js"
+import userRouter from './routes/user.route.js'
 
-app.use("/api", flashcardRouter)
+app.use("/api", cardRouter)
 app.use("/api", userRouter)
 
 

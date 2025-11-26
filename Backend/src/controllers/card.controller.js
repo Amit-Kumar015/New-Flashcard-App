@@ -2,6 +2,7 @@ import mongoose, {isValidObjectId} from "mongoose";
 import {User} from "../models/User.model.js"
 import {Card} from "../models/Card.model.js"
 
+
 const createCard = async (req, res) => {
     try {
         // validate data
@@ -526,7 +527,7 @@ export {
     deleteCard,
     filterCard,
     tags,
-    decks,
-    deckCards,
-    deleteDeck
+    // decks,
+    // deckCards,
+    // deleteDeck
 }
