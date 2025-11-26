@@ -10,7 +10,6 @@ import { createCard,
         decks, 
         deckCards, 
         deleteDeck 
-        // make a controller to fetch single card
 } from "../controllers/flashcard.js"
 
 const router = Router()

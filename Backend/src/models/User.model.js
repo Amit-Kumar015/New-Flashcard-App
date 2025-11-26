@@ -8,23 +8,27 @@ const userSchema = new Schema({
         unique: true,
         trim: true,
         lowercase: true,
-        min: 3,
-        max: 12
+        minLength: 3,
+        maxLength: 12
     },
     email: {
         type: String,
         required: true,
         unique: true,
         trim: true,
-        lowercase: true
+        lowercase: true,
+        match: [/^\S+@\S+\.\S+$/, "Invalid email format"]
     },
     password: {
         type: String,
         required: true,
         trim: true,
-        min: 5,
-        max: 10
-    }
+        minLength: 5,
+    },
+    decks: [{
+        type: Schema.Types.ObjectId,
+        ref: "Deck"
+    }]
 }, {timestamps: true})
 
 userSchema.plugin(mongooseAggregatePaginate)

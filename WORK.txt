@@ -1,23 +1,11 @@
-IMPORTANT:
-OPEN CARD UI
-HOME PAGE UI
-DECKS PAGE UI
-
-ON PROGRESS:
--- IMPLEMENTING FILTER API ON FRONTEND - DONE
--- MAKING DETAIL - DONE, 
- EDIT - DONE,
-  DELETE - DONE
- METHODS FOR CARDS
--- OPEN CARD UI - DONE
--- REVIEW CARDS - almost done on review the review date is not changing - done
--- PENDING CARD - done
--- HOME PAGE - done
--- creating card - done
--- DECK PAGE - done
--- testing - deleting decks not deletingits cards - done
--- error handling - done
--- clean up
+-- change current review logic to anki logic - 
+1. change database - 
+2. make apis
+3. change in FRONTEND
+-- add search functionality -
+1. change in database - indexing, visible
+2. make apis
+3. change in frontend
 -- integrate ai
--- dark mode
--- resend
+-- integrate resend
+-- write tests
