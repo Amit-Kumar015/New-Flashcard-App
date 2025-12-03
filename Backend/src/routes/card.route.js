@@ -7,9 +7,7 @@ import { createCard,
         deleteCard, 
         filterCard, 
         tags,
-        // decks, 
-        // deckCards, 
-        // deleteDeck 
+        // review update
 } from "../controllers/card.controller.js"
 
 const router = Router()
@@ -30,13 +28,6 @@ router.route("/flashcard/:id")
 
 router.route("/flashcard/filter")
         .get(verifyJWT, filterCard)
-
-// router.route("/flashcard/decks")
-//         .get(verifyJWT, decks)
-
-// router.route("/flashcard/decks/:deck")
-//         .get(verifyJWT, deckCards)
-//         .delete(verifyJWT, deleteDeck)
         
    
 export default router

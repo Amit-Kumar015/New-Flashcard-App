@@ -154,7 +154,7 @@ function CreateCardModal({ onOpenChange, onSubmit, handleRefresh }) {
 
 						<div className="space-y-2">
 							<Label htmlFor="tag" className="text-lg font-semibold">
-								Tags (Optional)
+								Tag (Optional)
 							</Label>
 							<Input
 								id="tag"

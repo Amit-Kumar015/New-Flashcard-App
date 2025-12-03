@@ -17,9 +17,10 @@ app.use(errorHandler)
 // routes
 import cardRouter from "./routes/card.route.js"
 import userRouter from './routes/user.route.js'
+import deckRouter from "./routes/deck.route.js"
 
 app.use("/api", cardRouter)
 app.use("/api", userRouter)
-
+app.use("/api", deckRouter)
 
 export default app

@@ -23,15 +23,18 @@ const CardSchema = new Schema({
     easeFactor: {
         type: Number,
         default: 2.5,
-        min: 1.3
+        min: 1.3,
+        select: false
     },
     interval: {
         type: Number,
-        default: 1
+        default: 1,
+        select: false
     },
     repetitions: {
         type: Number,
-        default: 0
+        default: 0,
+        select: false
     },
     reviewDate: {
         type: Date,
@@ -44,7 +47,8 @@ const CardSchema = new Schema({
     },
     user: {
         type: Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: true
     }
 }, {timestamps: true})
 

@@ -1,5 +1,5 @@
-import AppError from "../utils/AppError";
-import sendResponse from "../utils/sendResponse";
+import AppError from "../utils/AppError.js";
+import sendResponse from "../utils/sendResponse.js";
 
 export default function errorHandler(err, req, res, next){
     const statusCode = err.statusCode || 500
