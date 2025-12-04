@@ -6,180 +6,250 @@ import AppError from "../utils/AppError.js";
 import sendResponse from "../utils/sendResponse.js"
 import catchAsync from "../utils/catchAsync.js";
 
-const decks = async (req, res) => {
-    try {
-        // take user id
-        // autheticate user - middleware
-        // fetch all decks
-    
-        if(!req.user || !req.user._id){
-            const error = new Error('Unauthorized - User ID missing')
-            error.status = 401
-            throw error
-        }
-        const id = req.user._id
-    
-        const allDecks = await Card.aggregate([
-            {
-                $match: {user: new mongoose.Types.ObjectId(id)}
-            },
-            {
-                $group: {
-                    _id: "$deck",
-                    totalCards: {$sum: 1}
-                }
-            },
-            {
-                $project: {
-                    deck: "$_id",
-                    totalCards: 1,
-                    _id: 0
-                }
-            },
-            {
-                $sort: {totalCards: -1}
-            }
-        ])
-    
-        if(allDecks.length === 0){
-            const error = new Error("No deck found")
-            error.status = 404
-            throw error
-        }
-        
-        if(!allDecks){
-            const error = new Error("error while fetching decks")
-            error.status = 500
-            throw error
-        }
-    
-        return res.status(200).json({
-            message: "all decks fetched successfully",
-            allDecks
-        })
-    } catch (error) {
-        return res.status(error.status || 500).json({
-            message: error.message || 'Server error'
-        })
-    }
-}
 
-const deckCards = async (req, res) => {
-    try {
-        // take user id 
-        // take deck name from params
-        // fetch cards of that deck
-    
-        if(!req.user || !req.user._id){
-            const error = new Error('Unauthorized - User ID missing')
-            error.status = 401
-            throw error
-        }
-        const id = req.user._id
-        const {deck} = req.params
-    
-        if(!deck){
-            const error = new Error('provide valid deck name')
-            error.status = 400
-            throw error
-        }
-    
-        const cards = await Card.aggregate([
-            {
-                $match: {
-                    user: new mongoose.Types.ObjectId(id),
-                    deck: deck
-                }
-            },
-            {
-                $project: {
-                    question: 1,
-                    answer: 1,
-                    level: 1,
-                    tag: 1,
-                    deck: 1,
-                    hint: 1,
-                    reviewDate: 1
-                }
-            },
-            {
-                $sort: {reviewDate: 1}
-            }
-        ])
-    
-        if(cards.length === 0){
-            const error = new Error("No cards found")
-            error.status = 404
-            throw error
-        }
-    
-        if(!cards){
-            const error = new Error("error while fetching cards")
-            error.status = 500
-            throw error
-        }
-    
-        return res.status(200).json({
-            message: "deck cards fetched successfully",
-            cards
-        })
-    } catch (error) {
-        return res.status(error.status || 500).json({
-            message: error.message || 'Server error'
-        })
-    }
-}
+const decks = catchAsync( async (req, res, next) => {
+    // take user id
+    // autheticate user - middleware
+    // fetch all decks of the user
 
-const deleteDeck = async (req, res) => {
-    try {
-        // deck name from params
-        // authenticate - middleware
-        // check if deck is empty
-        // delete cards first
-        // delete deck
-        
-        const {deck} = req.params
-        const id = req.user._id
-        if(!deck){
-            const error = new Error("provide deck name")
-            error.status = 404
-            throw error
-        }
-    
-        if(!req.user || !req.user._id){
-            const error = new Error('Unauthorized - User ID missing')
-            error.status = 401
-            throw error
-        }
-    
-        const deletedDeck = await Card.deleteMany({
-            user: new mongoose.Types.ObjectId(id),
-            deck
-        })
-    
-        if(!deletedDeck){
-            const error = new Error('error while deleting deck')
-            error.status = 500
-            throw error
-        }
-    
-        return res.status(200).json({
-            message: "deck successfully deleted",
-            deletedDeck
-        })
-    } catch (error) {
-        return res.status(error.status || 500).json({
-            message: error.message || 'Server error'
-        })
+    if(!req.user || !req.user._id){
+        return next(new AppError("Unauthorized - User ID missing", 401))
     }
-}
+    const id = req.user._id
+
+    const decks = await User.aggregate([
+        {
+            $match: {_id: new mongoose.Types.ObjectId(id)}
+        },
+        {
+            $lookup: {
+                from: 'decks',
+                let: {deckIds: '$decks'},
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {$in: ['$_id', "$$deckIds"]}
+                        }
+                    },
+                    {
+                        $sort: {updatedAt: -1}
+                    },
+                    {
+                        $project: {
+                            _id: 1,
+                            name: 1,
+                            visible: 1,
+                            cardCount: {$size: '$cards'},
+                            updatedAt: 1
+                        }
+                    }
+                ],
+                as: 'deckInfo'
+            }
+        },
+        {
+            $project: {
+                _id: 0,
+                totalDecks: {$size: '$deckInfo'},
+                decks: '$deckInfo'
+            }
+        }
+    ])
+
+    return sendResponse(res, 200, "all decks fetched successfully", decks)
+})
+
+const deckCards = catchAsync(async (req, res, next) => {
+    // this is used for both search deck and user deck
+    // take deck id from params
+    // fetch cards of that deck
+
+    const {deckId} = req.params
+
+    if(!deckId || !isValidObjectId(deckId)){
+        return next(new AppError("provide valid deck id", 400))
+    }
+
+    const cards = await Deck.aggregate([
+        {$match: {_id: new mongoose.Types.ObjectId(deckId)}},
+        {
+            $lookup: {
+                from: 'cards',
+                let: {cardsId: '$cards'},
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {$in: ["$_id", "$$cardsId"]}
+                        }
+                    },
+                    {
+                        $sort: {createdAt: -1}
+                    },
+                    {
+                        $project: {
+                            _id: 1,
+                            question: 1,
+                            answer: 1,
+                            tag: 1,
+                            hint: 1,
+                            reviewDate: 1,
+                            user: 1,
+                            createdAt: 1,
+                            updatedAt: 1
+                        }
+                    }
+                ],
+                as: 'cardsInfo'
+            }
+        },
+        {
+            $project: {
+                _id: 0,
+                deckId: '$_id',
+                deck: "$name",
+                totalCards: {$size: '$cardsInfo'},
+                cards: '$cardsInfo'
+            }
+        }
+    ])
+
+    return sendResponse(res, 200, "deck cards fetched successfully", cards)
+})
+
+const deleteDeck = catchAsync(async (req, res, next) => {
+    // deck name from params
+    // authenticate - middleware
+    // check if deck is empty
+    // delete cards first
+    // delete deck
+    
+    const {deckId} = req.params
+    if(!deckId || !isValidObjectId(deckId)){
+        return next(new AppError("provide valid deck id", 400))
+    }
+    
+    if(!req.user || !req.user._id){
+        return next(new AppError("Unauthorized - User ID missing", 401))
+    }
+    const id = req.user._id
+
+    const deck = await Deck.findById(deckId)
+    if (!deck) {
+        return next(new AppError("Deck not found", 404));
+    }
+
+    if(id.toString() !== deck.user.toString()){
+        return next(new AppError("Not allowed to delete this card", 403));
+    }
+
+    await Card.deleteMany({deck: deckId})
+
+    await Deck.findByIdAndDelete(deckId)
+
+    await User.findByIdAndUpdate(id, {
+        $pull: {decks: deckId}
+    }) 
+    
+    return sendResponse(res, 200, "Deck and all its cards deleted successfully")
+})
+
+const searchDeck = catchAsync(async (req, res, next) => {
+    // validate search parameter
+    // Convert search text to case-insensitive regex
+    // query on deck
+    // sort by recently updated
+
+    const {query} = req.query
+
+    if(!query || query.trim().length === 0){
+        return next(new AppError("Search query missing", 404))
+    }
+
+    const regex = new RegExp(query, 'i')
+
+    const decks = await Deck.find({
+        visible: true,
+        name: {$regex: regex}
+    })
+    .sort({updatedAt: -1})
+    .select("_id name visible user createdAt updatedAt")
+
+    return sendResponse(res, 200, "Fetched decks successfully", {
+        total: decks.length,
+        decks
+    })
+})
+
+const addPublicDeckToUser = catchAsync( async (req, res, next) => {
+    // take deckid and userid 
+    // validate data
+    // fetch that deck and its all cards
+    // create new deck and duplicate every cards
+    // add deck reference to user deck
+    
+    const {deckId} = req.params
+
+    if(!deckId || !isValidObjectId(deckId)){
+        return next(new AppError("provide valid deck id", 400))
+    }
+
+    if(!req.user || !req.user._id){
+        return next(new AppError("Unauthorized - User ID missing", 401))
+    }
+    const id = req.user._id
+
+    const originalDeck = await Deck.findById(deckId).populate('cards')
+
+    if(!originalDeck){
+        return next(new AppError("Deck not found", 404));
+    }
+
+    if(!originalDeck.visible){
+        return next(new AppError("This deck is not publicly visible", 403));
+    }
+
+    const newDeck = await Deck.create({
+        name: originalDeck.name + ' (copy)',
+        visible: true,
+        user: id,
+        cards: []
+    })
+
+    const newCardIds = []
+
+    for(const card in originalDeck.cards){
+        const newCard = await Card.create({
+            question: card.question,
+            answer: card.answer,
+            tag: card.tag,
+            hint: card.hint,
+            easeFactor: 2.5,
+            repetitions: 0,
+            reviewDate: Date.now(),
+            user: id,
+            deck: newDeck._id
+        })
+
+        newCardIds.push(newCard._id)
+    }
+
+    newDeck.cards = newCardIds
+    await newDeck.save()
+
+    await User.findByIdAndUpdate(id, {
+        $push: {decks: newDeck._id}
+    })
+
+    return sendResponse(res, 200, "Deck added to your list", {
+        deckId: newDeck._id,
+        totalCards: newCardIds.length
+    })
+})
 
 export {
-    createCard,
-    getAllCards,
-    pendingCards, 
-    updateCard, 
-    deleteCard,
-    filterCard,
-    tags
+    decks,
+    deckCards,
+    deleteDeck,
+    searchDeck,
+    addPublicDeckToUser
 }

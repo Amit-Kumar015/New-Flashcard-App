@@ -182,9 +182,7 @@ const updateCard = catchAsync(async (req, res, next) => {
     const {newQuestion, newAnswer, newTag, newDeck, newHint} = req.body
 
     if(!id || !isValidObjectId(id)){
-        const error = new Error('provide valid card id')
-        error.status = 400
-        throw error
+        return next(new AppError("provide valid card id", 400))
     }
 
     if(!req.user || !req.user._id){
@@ -192,7 +190,7 @@ const updateCard = catchAsync(async (req, res, next) => {
     }
     
     const card = await Card.findById(id)
-    if(card.length === 0){
+    if(!card){
         return next(new AppError("card not found", 404))
     }
     
@@ -260,8 +258,12 @@ const deleteCard = catchAsync(async (req, res, next) => {
     }
 
     const card = await Card.findOne({id: id, user: req.user._id})
-    if(card.length === 0){
+    if(!card){
         return next(new AppError("card not found"))
+    }
+
+    if(card.user.toString() !== req.user._id.toString()){
+        return next(new AppError("Not allowed to update this card", 403))
     }
 
     await Deck.updateOne(
@@ -330,6 +332,69 @@ const tags = catchAsync(async (req, res, next) => {
     return sendResponse(res, 200, "all tags fetched successfully", allTag)
 })
 
+const updateReviewDate = catchAsync(async (req, res, next) => {
+    // get difficulty from params 1-hard, 2-medium, 3-easy
+    // get id of card from params
+    // validate id
+    // write next review date logic
+    // find and update card
+
+    const {difficulty, id} = req.params
+
+    let q = Number(difficulty)
+    if(q < 1 || q > 3){
+        return next(new AppError("Invalid value", 400))
+    }
+
+    if(!id || !isValidObjectId(id)){
+        return next(new AppError("provide valid card id", 400))
+    }
+
+    if(!req.user || !req.user._id){
+        return next(new AppError("Unauthorized - User ID missing", 401))
+    }
+
+    const card = await Card.findById(id)
+
+    if(!card){
+        return next(new AppError("card not found", 404))
+    }
+    
+    if(card.user.toString() !== req.user._id.toString()) {
+        return next(new AppError("Not allowed to update this card", 403));
+    }
+
+    const oneDay = 24*60*60*1000
+
+    if(q === 1){
+        card.interval = 1
+        card.repetitions = 0
+        card.reviewDate = new Date(Date.now() + oneDay)
+    }
+    else{
+        if(card.repetitions == 0){
+            card.interval = 1
+        }
+        else if(card.repetitions == 1){
+            card.interval = 6
+        }
+        else{
+            card.interval = Math.round(card.interval * card.easeFactor)
+        }
+
+        const newEF = card.easeFactor + (0.1 - (3 - q) * (0.08 + (3 - q) * 0.02))
+        card.easeFactor = Math.max(newEF, 1.3)
+
+        card.repetitions += 1
+
+        card.reviewDate = new Date(Date.now() + card.interval * oneDay);
+    }
+
+    const savedCard = await card.save()
+
+    return sendResponse(res, 200, "Review updated", savedCard)    
+})
+
 
 export {
     createCard,
@@ -338,5 +403,6 @@ export {
     updateCard, 
     deleteCard,
     filterCard,
-    tags
+    tags,
+    updateReviewDate
 }

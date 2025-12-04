@@ -24,17 +24,14 @@ const CardSchema = new Schema({
         type: Number,
         default: 2.5,
         min: 1.3,
-        select: false
     },
     interval: {
         type: Number,
         default: 1,
-        select: false
     },
     repetitions: {
         type: Number,
         default: 0,
-        select: false
     },
     reviewDate: {
         type: Date,
