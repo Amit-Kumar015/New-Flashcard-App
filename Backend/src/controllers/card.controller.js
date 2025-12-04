@@ -339,7 +339,7 @@ const updateReviewDate = catchAsync(async (req, res, next) => {
     // write next review date logic
     // find and update card
 
-    const {difficulty, id} = req.params
+    const {difficulty, id} = req.query
 
     let q = Number(difficulty)
     if(q < 1 || q > 3){

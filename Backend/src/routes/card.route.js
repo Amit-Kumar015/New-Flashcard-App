@@ -7,7 +7,7 @@ import { createCard,
         deleteCard, 
         filterCard, 
         tags,
-        // review update
+        updateReviewDate
 } from "../controllers/card.controller.js"
 
 const router = Router()
@@ -28,6 +28,9 @@ router.route("/flashcard/:id")
 
 router.route("/flashcard/filter")
         .get(verifyJWT, filterCard)
+
+router.route("/flashcard/review")
+        .patch(verifyJWT, updateReviewDate)
         
    
 export default router
