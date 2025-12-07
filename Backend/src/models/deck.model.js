@@ -22,7 +22,6 @@ const deckSchema = new Schema({
     }]
 }, {timestamps: true})
 
-deckSchema.index({name : 1})
 deckSchema.index({name: 1, visible: 1})
 deckSchema.index({user: 1})
 
