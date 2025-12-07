@@ -21,6 +21,10 @@ const createCard = catchAsync(async (req, res, next) => {
         return next(new AppError("send all details of card", 400))
     }
 
+    if(!deck || deck.trim().length == 0){
+        return next(new AppError("provide deck", 404))
+    }
+
     if(!req.user || !req.user._id){
         return next(new AppError("Unauthorized - User ID missing", 401))
     }
@@ -102,6 +106,7 @@ const getAllCards = catchAsync(async (req, res, next) => {
         },
         {
             $project: {
+                _id: 1,
                 question: 1,
                 answer: 1,
                 tag: 1,
@@ -157,6 +162,7 @@ const pendingCards = catchAsync(async (req, res, next) => {
         },
         {
             $project: {
+                _id: 1,
                 question: 1,
                 answer: 1,
                 tag: 1,
@@ -185,9 +191,16 @@ const updateCard = catchAsync(async (req, res, next) => {
         return next(new AppError("provide valid card id", 400))
     }
 
+    if (!newQuestion && !newAnswer && !newTag && !newDeck && !newHint) {
+        return next(new AppError("no fields provided to update", 400));
+    }
+
     if(!req.user || !req.user._id){
         return next(new AppError("Unauthorized - User ID missing", 401))
     }
+
+    const user = await User.findById(req.user._id);
+    if (!user) return next(new AppError("user does not exist in db", 404));
     
     const card = await Card.findById(id)
     if(!card){
@@ -202,9 +215,9 @@ const updateCard = catchAsync(async (req, res, next) => {
     if(newDeck){
         deck = await Deck.findOne({
             $or: [
-                {_id: id ? newDeck : null},
-                {name: newDeck}
-            ],
+                isValidObjectId(newDeck) ? { _id: newDeck } : null,
+                { name: newDeck }
+            ].filter(Boolean),
             user: req.user._id
         })
 
@@ -241,7 +254,7 @@ const updateCard = catchAsync(async (req, res, next) => {
     return sendResponse(res, 200, "updated card successfully", updatedCardData)
 })
 
-const deleteCard = catchAsync(async (req, res, next) => {
+const deleteCard = catchAsync(async (req, res, next) => { 
     // take card id
     // authenticate user - middleware
     // check card exist
@@ -257,13 +270,16 @@ const deleteCard = catchAsync(async (req, res, next) => {
         return next(new AppError("Unauthorized - User ID missing", 401))
     }
 
-    const card = await Card.findOne({id: id, user: req.user._id})
+    const user = await User.findById(req.user._id);
+    if (!user) return next(new AppError("user does not exist in db", 404));
+    
+    const card = await Card.findOne({_id: id, user: req.user._id})
     if(!card){
-        return next(new AppError("card not found"))
+        return next(new AppError("card not found", 404))
     }
 
     if(card.user.toString() !== req.user._id.toString()){
-        return next(new AppError("Not allowed to update this card", 403))
+        return next(new AppError("Not allowed to delete this card", 403))
     }
 
     await Deck.updateOne(
@@ -273,7 +289,11 @@ const deleteCard = catchAsync(async (req, res, next) => {
 
     await Card.findByIdAndDelete(id)
     
-    return sendResponse(res, 200, "card deleted successfully", card)
+    return sendResponse(res, 200, "card deleted successfully", {
+        id: card._id,
+        question: card.question,
+        deck: card.deck
+    })
 })
 
 const filterCard = catchAsync(async (req, res, next) => {
@@ -282,6 +302,10 @@ const filterCard = catchAsync(async (req, res, next) => {
     // fetch data
 
     const {tag, deckId} = req.query
+
+    if(!tag && !deckId){
+        return next(new AppError("no fields provided to filter cards", 400))
+    }
 
     if(!req.user || !req.user._id){
         return next(new AppError("Unauthorized - User ID missing", 401))
@@ -293,13 +317,46 @@ const filterCard = catchAsync(async (req, res, next) => {
     };
 
     if(tag) matchQuery.tag = tag;
-    if(deckId){
-        matchQuery.deck = new mongoose.Types.ObjectId(deckId)
-    } 
+    if (deckId) {
+        if (!isValidObjectId(deckId)) {
+            return next(new AppError("Invalid deck id", 400));
+        }
+
+        const deck = await Deck.findOne({
+            _id: deckId,
+            user: id,
+        });
+
+        if (!deck) {
+            return next(new AppError("Deck not found or not allowed", 404));
+        }
+
+        matchQuery.deck = new mongoose.Types.ObjectId(deckId);
+    }
 
     const cards = await Card.aggregate([
         { $match: matchQuery },
-        { $sort: { reviewDate: 1 } }
+        {
+            $lookup: {
+                from: "decks",
+                localField: "deck",
+                foreignField: "_id",
+                as: "deckInfo",
+            },
+        },
+        { $unwind: { path: "$deckInfo", preserveNullAndEmptyArrays: true } },
+        { $sort: { reviewDate: 1 } },
+        {
+            $project: {
+                _id: 1,
+                question: 1,
+                answer: 1,
+                tag: 1,
+                deck: "$deckInfo.name",
+                hint: 1,
+                reviewDate: 1,
+            },
+        },
     ]);
 
     return sendResponse(res, 200, "cards fetched successfully", cards)
@@ -317,12 +374,18 @@ const tags = catchAsync(async (req, res, next) => {
 
     const allTag = await Card.aggregate([
         {
-            $match: {user: new mongoose.Types.ObjectId(id)}
+            $match: {
+                user: new mongoose.Types.ObjectId(id),
+                tag: { $exists: true, $ne: null, $ne: "" }
+            }
         },
         {
             $group: {
                 _id: "$tag"
             }
+        },
+        {
+            $sort: {_id: -1}
         },
         {
             $project: {_id: 0, tag: "$_id"}
@@ -361,7 +424,7 @@ const updateReviewDate = catchAsync(async (req, res, next) => {
     }
     
     if(card.user.toString() !== req.user._id.toString()) {
-        return next(new AppError("Not allowed to update this card", 403));
+        return next(new AppError("Not allowed to review this card", 403));
     }
 
     const oneDay = 24*60*60*1000
@@ -392,7 +455,11 @@ const updateReviewDate = catchAsync(async (req, res, next) => {
 
     const savedCard = await card.save()
 
-    return sendResponse(res, 200, "Review updated", savedCard)    
+    return sendResponse(res, 200, "Review updated", {
+        id: savedCard._id,
+        message: "Review updated",
+        nextReviewDate: savedCard.reviewDate
+    })
 })
 
 

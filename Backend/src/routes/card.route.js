@@ -29,7 +29,7 @@ router.route("/flashcard/:id")
 router.route("/flashcard/filter")
         .get(verifyJWT, filterCard)
 
-router.route("/flashcard/review")
+router.route("/flashcard/actions/review")
         .patch(verifyJWT, updateReviewDate)
         
    
