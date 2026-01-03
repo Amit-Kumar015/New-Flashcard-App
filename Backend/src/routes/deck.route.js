@@ -16,10 +16,10 @@ router.route("/flashcard/decks/:deckId")
         .get(verifyJWT, deckCards)
         .delete(verifyJWT, deleteDeck)
 
-router.route("/flashcard/decks/search")
+router.route("/flashcard/decks/action/search")
         .get(verifyJWT, searchDeck)
 
-router.route("/flashcard/adddeck")
+router.route("/flashcard/decks/action/add/:deckId")
         .patch(verifyJWT, addPublicDeckToUser)
         
    
