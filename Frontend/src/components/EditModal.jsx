@@ -4,14 +4,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Edit, Save, X } from "lucide-react"
 import { toast } from "react-toastify"
 
 export default function EditModal({flashcard, open, onOpenChange, onSave, refresh}){
     const [newQuestion, setNewQuestion] = useState("")
     const [newAnswer, setNewAnswer] = useState("")
-    const [newLevel, setNewLevel] = useState(null)
     const [newTag, setNewTag] = useState("")
     const [newDeck, setNewDeck] = useState("")
     const [newHint, setNewHint] = useState("")
@@ -33,7 +31,6 @@ export default function EditModal({flashcard, open, onOpenChange, onSave, refres
         if(flashcard){
             setNewQuestion(flashcard.question || "")
             setNewAnswer(flashcard.answer || "")
-            setNewLevel(flashcard.level || null)
             setNewTag(flashcard.tag || "")
             setNewDeck(flashcard.deck || "")
             setNewHint(flashcard.hint || "")
@@ -52,7 +49,6 @@ export default function EditModal({flashcard, open, onOpenChange, onSave, refres
             ...flashcard,
             question: newQuestion.trim(),
             answer: newAnswer.trim(),
-            level: Number(newLevel),
             tag: newTag.trim(),
             deck: newDeck.trim(),
             hint: newHint.trim()
@@ -76,7 +72,6 @@ export default function EditModal({flashcard, open, onOpenChange, onSave, refres
         if (flashcard) {
             setNewQuestion(flashcard.question || "")
             setNewAnswer(flashcard.answer || "")
-            setNewLevel(flashcard.level || null)
             setNewTag(flashcard.tags || "")
             setNewDeck(flashcard.deck || "")
             setNewHint(flashcard.hint || "")
@@ -146,23 +141,7 @@ export default function EditModal({flashcard, open, onOpenChange, onSave, refres
                     </CardHeader>
                     <CardContent className="space-y-5">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div className="space-y-3">
-                        <Label htmlFor="level" className="text-base">Level</Label>
-                        <Select value={String(newLevel)} onValueChange={(val) => setNewLevel(Number(val))}>
-                            <SelectTrigger className="text-lg">
-                            <SelectValue placeholder="Select level" />
-                            </SelectTrigger>
-                            <SelectContent>
-                            <SelectItem value="1">1</SelectItem>
-                            <SelectItem value="2">2</SelectItem>
-                            <SelectItem value="3">3</SelectItem>
-                            <SelectItem value="4">4</SelectItem>
-                            <SelectItem value="5">5</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        </div>
-
-                        <div className="space-y-3">
+                        <div className="">
                         <Label htmlFor="deck" className="text-base">Deck</Label>
                         <Input
                             id="deck"

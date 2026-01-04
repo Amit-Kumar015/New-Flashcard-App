@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, Filter, Check } from 'lucide-react';
+import React, {useEffect} from "react";
+import { X, Filter, Check } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -7,11 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 
 function FilterModal({
-  // filterLevel,
-  // setFilterLevel,
   filterTag,
   setFilterTag,
   filterDeck,
@@ -20,12 +18,24 @@ function FilterModal({
   deck,
   handleSubmit,
   handleReset,
-  setFilter
+  setFilter,
 }) {
+
+  useEffect(() => {
+    if (setFilter) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [setFilter]);
+
   return (
     <div className="fixed inset-0 flex backdrop-blur-xs items-center justify-center z-20">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Filter className="h-5 w-5 text-primary" />
@@ -35,8 +45,8 @@ function FilterModal({
             variant="ghost"
             size="icon"
             onClick={() => {
-              handleReset()
-              setFilter(false)
+              handleReset();
+              setFilter(false);
             }}
             className="h-8 w-8 rounded-full hover:bg-gray-100"
           >
@@ -47,27 +57,11 @@ function FilterModal({
         <div className="my-5">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
-
-              {/* <div className="space-y-2">
-                <label htmlFor="level" className="text-sm font-medium text-gray-700">
-                  Level
-                </label>
-                <Select value={filterLevel} onValueChange={setFilterLevel}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a level" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1">Level 1</SelectItem>
-                    <SelectItem value="2">Level 2</SelectItem>
-                    <SelectItem value="3">Level 3</SelectItem>
-                    <SelectItem value="4">Level 4</SelectItem>
-                    <SelectItem value="5">Level 5</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div> */}
-
               <div className="space-y-2">
-                <label htmlFor="tag" className="text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="tag"
+                  className="text-sm font-medium text-gray-700"
+                >
                   Tag
                 </label>
                 <Select value={filterTag} onValueChange={setFilterTag}>
@@ -75,9 +69,8 @@ function FilterModal({
                     <SelectValue placeholder="Select a tag" />
                   </SelectTrigger>
                   <SelectContent>
-                    {tag?.filter((item) =>
-                      item.tag && item.tag.trim() !== ""
-                    )
+                    {tag
+                      ?.filter((item) => item.tag && item.tag.trim() !== "")
                       .map((item, index) => (
                         <SelectItem key={index} value={item.tag}>
                           {item.tag}
@@ -88,7 +81,10 @@ function FilterModal({
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="deck" className="text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="deck"
+                  className="text-sm font-medium text-gray-700"
+                >
                   Deck
                 </label>
                 <Select value={filterDeck} onValueChange={setFilterDeck}>
@@ -96,9 +92,8 @@ function FilterModal({
                     <SelectValue placeholder="Select a deck" />
                   </SelectTrigger>
                   <SelectContent>
-                    {deck?.filter((item) =>
-                      item.name && item.name.trim() !== ""
-                    )
+                    {deck
+                      ?.filter((item) => item.name && item.name.trim() !== "")
                       .map((item) => (
                         <SelectItem key={item._id} value={item._id}>
                           {item.name}
@@ -122,8 +117,8 @@ function FilterModal({
                 type="button"
                 variant="ghost"
                 onClick={() => {
-                  handleReset()
-                  setFilter(false)
+                  handleReset();
+                  setFilter(false);
                 }}
                 className="flex-1"
               >
