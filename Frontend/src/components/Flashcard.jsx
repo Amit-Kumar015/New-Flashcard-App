@@ -12,24 +12,26 @@ export default function Flashcard({
     onDelete
 }) {
 
-    const getLevelColor = (level) => {
-        if(level == 1 || level == 2){
-            return "bg-red-100 text-red-800 hover:bg-red-200"
-        }
-        else if(level == 2){
-            return "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
-        }
-        else{
-            return "bg-green-100 text-green-800 hover:bg-green-200"
-        }
-    }
+    // console.log(card.deck);
+    
+    // const getLevelColor = (level) => {
+    //     if(level == 1 || level == 2){
+    //         return "bg-red-100 text-red-800 hover:bg-red-200"
+    //     }
+    //     else if(level == 2){
+    //         return "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
+    //     }
+    //     else{
+    //         return "bg-green-100 text-green-800 hover:bg-green-200"
+    //     }
+    // }
     
     return (
         <Card className="w-full h-48 relative hover:shadow-lg transition-shadow duration-200" onClick={Click}>
             <div className="absolute top-4 left-4 z-10 ">
-                <Badge variant="secondary" className={getLevelColor(card.level)}>
+                {/* <Badge variant="secondary" className={getLevelColor(card.level)}>
                     L{card.level}
-                </Badge>
+                </Badge> */}
                 {card.tag && 
                     <Badge variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200 ml-2">
                         {card.tag}

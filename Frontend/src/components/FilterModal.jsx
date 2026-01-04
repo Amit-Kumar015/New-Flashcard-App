@@ -10,8 +10,8 @@ import {
 import { Button } from '@/components/ui/button';
 
 function FilterModal({
-  filterLevel,
-  setFilterLevel,
+  // filterLevel,
+  // setFilterLevel,
   filterTag,
   setFilterTag,
   filterDeck,
@@ -34,7 +34,10 @@ function FilterModal({
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setFilter(false)}
+            onClick={() => {
+              handleReset()
+              setFilter(false)
+            }}
             className="h-8 w-8 rounded-full hover:bg-gray-100"
           >
             <X className="h-4 w-4" />
@@ -45,7 +48,7 @@ function FilterModal({
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
 
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <label htmlFor="level" className="text-sm font-medium text-gray-700">
                   Level
                 </label>
@@ -61,7 +64,7 @@ function FilterModal({
                     <SelectItem value="5">Level 5</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
+              </div> */}
 
               <div className="space-y-2">
                 <label htmlFor="tag" className="text-sm font-medium text-gray-700">
@@ -72,7 +75,7 @@ function FilterModal({
                     <SelectValue placeholder="Select a tag" />
                   </SelectTrigger>
                   <SelectContent>
-                    {tag.filter((item) =>
+                    {tag?.filter((item) =>
                       item.tag && item.tag.trim() !== ""
                     )
                       .map((item, index) => (
@@ -93,12 +96,12 @@ function FilterModal({
                     <SelectValue placeholder="Select a deck" />
                   </SelectTrigger>
                   <SelectContent>
-                    {deck.filter((item) =>
-                      item.deck && item.deck.trim() !== ""
+                    {deck?.filter((item) =>
+                      item.name && item.name.trim() !== ""
                     )
-                      .map((item, index) => (
-                        <SelectItem key={index} value={item.deck}>
-                          {item.deck}
+                      .map((item) => (
+                        <SelectItem key={item._id} value={item._id}>
+                          {item.name}
                         </SelectItem>
                       ))}
                   </SelectContent>
@@ -118,7 +121,10 @@ function FilterModal({
               <Button
                 type="button"
                 variant="ghost"
-                onClick={() => setFilter(false)}
+                onClick={() => {
+                  handleReset()
+                  setFilter(false)
+                }}
                 className="flex-1"
               >
                 Cancel
