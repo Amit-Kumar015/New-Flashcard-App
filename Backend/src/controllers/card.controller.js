@@ -168,7 +168,8 @@ const pendingCards = catchAsync(async (req, res, next) => {
                 tag: 1,
                 deck: '$deckInfo.name',
                 hint: 1,
-                reviewDate: 1
+                reviewDate: 1,
+                createdAt: 1
             }
         }
     ])

@@ -7,6 +7,8 @@ import { useEffect } from "react"
 
 export function DetailModal({ flashcard, open, onOpenChange }) {
   useEffect(() => {
+    console.log(flashcard);
+    
     if (open) {
       document.body.style.overflow = "hidden"
     } else {
@@ -20,21 +22,13 @@ export function DetailModal({ flashcard, open, onOpenChange }) {
   if (!flashcard || !open) return null
 
   const formatDate = (dateString) => {
+    console.log(dateString);
+    
     return new Date(dateString).toLocaleDateString("en-IN", {
       year: "numeric",
       month: "long",
       day: "numeric",
     })
-  }
-
-  const getLevelColor = (level) => {
-    if (level == 1) {
-      return "bg-red-100 text-red-800 hover:bg-red-200"
-    } else if (level == 2 || level == 3) {
-      return "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
-    } else {
-      return "bg-green-100 text-green-800 hover:bg-green-200"
-    }
   }
 
   return (
@@ -78,20 +72,6 @@ export function DetailModal({ flashcard, open, onOpenChange }) {
         </Card>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <TrendingUp className="w-4 h-4 text-blue-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Level</p>
-                  <Badge className={getLevelColor(flashcard.level)}>{flashcard.level}</Badge>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
