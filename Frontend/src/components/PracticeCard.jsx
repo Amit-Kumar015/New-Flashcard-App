@@ -9,22 +9,12 @@ export function PracticeCard({ flashcard, onAnswer }) {
   const [showHint, setShowHint] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
 
-  const handleAnswer = (isCorrect) => {
+  const handleAnswer = (difficulty) => {
     if (onAnswer) {
-      onAnswer(flashcard, isCorrect)
+      onAnswer(flashcard, difficulty)
     }
     setShowHint(false)
     setShowAnswer(false)
-  }
-
-  const getLevelColor = (level) => {
-    if (level == 1) {
-      return "bg-red-100 text-red-800 hover:bg-red-200"
-    } else if (level == 2 || level == 3) {
-      return "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
-    } else {
-      return "bg-green-100 text-green-800 hover:bg-green-200"
-    }
   }
 
   if (!flashcard) return null
@@ -34,9 +24,6 @@ export function PracticeCard({ flashcard, onAnswer }) {
         <Card className="min-w-lg overflow-y-auto p-6"> 
         <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-            <Badge className={getLevelColor(flashcard.level)}>
-                {flashcard.level}
-            </Badge>
             {flashcard.deck && (
                 <Badge variant="outline" className="text-xs">
                 {flashcard.deck}
@@ -155,6 +142,30 @@ export function PracticeCard({ flashcard, onAnswer }) {
                 >
                 <div className="flex gap-3">
                     <Button
+                    onClick={() => handleAnswer(3)}
+                    className="flex-1 flex items-center gap-2 bg-green-600 hover:bg-green-700"
+                    size="lg"
+                    >
+                    <CheckCircle className="w-5 h-5" />
+                    Easy
+                    </Button>
+                    <Button
+                    onClick={() => handleAnswer(2)}
+                    className="flex-1 flex items-center gap-2 bg-yellow-600 hover:bg-yellow-700"
+                    size="lg"
+                    >
+                    <CheckCircle className="w-5 h-5" />
+                    Medium
+                    </Button>
+                    <Button
+                    onClick={() => handleAnswer(1)}
+                    className="flex-1 flex items-center gap-2 bg-red-600 hover:bg-red-700"
+                    size="lg"
+                    >
+                    <CheckCircle className="w-5 h-5" />
+                    Hard
+                    </Button>
+                    {/* <Button
                     onClick={() => handleAnswer(true)}
                     className="flex-1 flex items-center gap-2 bg-green-600 hover:bg-green-700"
                     size="lg"
@@ -170,7 +181,7 @@ export function PracticeCard({ flashcard, onAnswer }) {
                     >
                     <XCircle className="w-5 h-5" />
                     Got it Wrong
-                    </Button>
+                    </Button> */}
                 </div>
                 <Button
                     variant="outline"

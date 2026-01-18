@@ -408,7 +408,7 @@ const updateReviewDate = catchAsync(async (req, res, next) => {
 
     let q = Number(difficulty)
     if(q < 1 || q > 3){
-        return next(new AppError("Invalid value", 400))
+        return next(new AppError("Invalid value", 300))
     }
 
     if(!id || !isValidObjectId(id)){
