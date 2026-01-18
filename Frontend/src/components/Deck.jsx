@@ -3,8 +3,7 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { MoreVertical } from "lucide-react"
 
-export default function Deck({title, icon: IconComponent, total, onDelete, onClick }) {
-
+export default function Deck({title, icon: IconComponent, totalcards, onDelete, onClick }) {
 
   return (
     <Card className="relative border rounded-xl shadow-sm hover:shadow-md transition-shadow min-w-[210px] mr-4 flex-shrink-0" onClick={onClick}>
@@ -38,7 +37,7 @@ export default function Deck({title, icon: IconComponent, total, onDelete, onCli
         <h3 className="mt-2 text-2xl font-semibold leading-snug text-slate-900 line-clamp-2">{title}</h3>
 
         <div className="mt-3 text-xs text-slate-600">
-          <span className="font-medium">{total} Cards</span>
+          <span className="font-medium">{totalcards} Cards</span>
         </div>
       </CardContent>
     </Card>

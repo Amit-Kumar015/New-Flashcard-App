@@ -18,19 +18,20 @@ function MyDecks() {
   const fetchDecks = async () => {
     try {
       const response = await axios.get(`${url}/flashcard/decks`)
-      setDecks(response.data.allDecks)
+      console.log(response.data.data[0].decks.length);
+      
+      setDecks(response?.data?.data[0]?.decks)
     } catch (error) {
       toast.error("Error in fetching decks")
-      console.error('Errorin fetching decks: ', error);
+      console.error('Error in fetching decks: ', error);
     }
   }
 
-  const onDelete = async (deck) => {
-    axios.delete(`${url}/flashcard/decks/${deck}`)
+  const onDelete = async (deckId) => {
+    await axios.delete(`${url}/flashcard/decks/${deckId}`)
     .then((response) => {
       toast.success("deck deleted successfully")
       console.log("deck deleted: ", response);
-
       fetchDecks()
     }).catch((err) => {
       toast.error("Error deleting deck")
@@ -38,8 +39,8 @@ function MyDecks() {
     })
   }
 
-  const handleClick = (deck) => {
-    navigate(`/my-decks/${deck}`)
+  const handleClick = (deckId) => {
+    navigate(`/my-decks/${deckId}`)
   }
 
   return (
@@ -49,21 +50,21 @@ function MyDecks() {
 
           <section className="flex-1">
             <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div>
+              <div className="flex flex-col gap-2">
                 <h1 className="text-2xl font-bold text-slate-900">My Decks</h1>
                 <p className="text-sm text-slate-500">Total: {decks.length} Decks</p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 xl:grid-cols-4">
-              {decks.map((d, i) => (
+              {decks?.map((d, i) => (
                 <Deck
                   key={i}
-                  title={d.deck}
-                  icon={getDeckIcon(d.deck)}
-                  total={d.totalCards}
-                  onDelete={() => onDelete(d.deck)}
-                  onClick={() => handleClick(d.deck)}
+                  title={d.name}
+                  icon={getDeckIcon(d.name)}
+                  totalCards={d.cardCount}
+                  onDelete={() => onDelete(d._id)}
+                  onClick={() => handleClick(d._id)}
                 />
               ))}
             </div>
