@@ -1,158 +1,166 @@
-import { DetailModal } from '@/components/DetailModal';
-import EditModal from '@/components/EditModal';
-import Flashcard from '@/components/Flashcard'
-import ReviewAllCard from '@/components/ReviewAllCard';
-import ReviewCard from '@/components/ReviewCard';
-import axios from 'axios'
-import { Repeat, RefreshCcwIcon } from 'lucide-react';
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-
+import { DetailModal } from "@/components/DetailModal";
+import EditModal from "@/components/EditModal";
+import Flashcard from "@/components/Flashcard";
+import ReviewAllCard from "@/components/ReviewAllCard";
+import ReviewCard from "@/components/ReviewCard";
+import axios from "axios";
+import { Repeat, RefreshCcwIcon } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function DeckCards() {
-	const url = import.meta.env.VITE_API_URL
-	const [cards, setCards] = useState([])
-	const [edit, setEdit] = useState(false)
-	const [detail, setDetail] = useState(false)
-	const [selectedCard, setSelectedCard] = useState(null)
-	const [showCard, setShowCard] = useState(false)
-	const [review, setReview] = useState(false)
+  const url = import.meta.env.VITE_API_URL;
+  const [cards, setCards] = useState([]);
+  const [edit, setEdit] = useState(false);
+  const [deck, setDeck] = useState(null)
+  const [detail, setDetail] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [showCard, setShowCard] = useState(false);
+  const [review, setReview] = useState(false);
 
-	const { deck } = useParams()
+  const { deckId } = useParams();
 
-	useEffect(() => {
-		fetchCards()
-	}, [])
+  useEffect(() => {
+    fetchCards();
+  }, []);
 
-	const fetchCards = async () => {
-		try {
-			const response = await axios.get(`${url}/flashcard/decks/${deck}`)
-			setCards(response.data?.cards)
-		}
-		catch (error) {
-			toast.error(error.response?.data?.error || "Fetching cards failed")
-			console.error("Fetching cards failed: ", error);
-		}
-	}
+  const fetchCards = async () => {
+    try {
+      const response = await axios.get(`${url}/flashcard/decks/${deckId}`);
+      console.log(response?.data?.data[0].cards);
+      console.log(response?.data?.data[0].deck);
 
-	const onDelete = async (id) => {
-		axios.delete(`${url}/flashcard/${id}`)
-		.then((response) => {
-			toast.success("Card deleted successfully")
-			console.log("card deleted: ", response);
-			fetchCards()
-			alert("card deleted")
-		}).catch((err) => {
-			toast.error("Error deleting card")
-			console.error("error deleting card: ", err);
-		})
-	}
+      setCards(response?.data?.data[0].cards);
+	  setDeck(response?.data?.data[0].deck)
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Fetching cards failed");
+      console.error("Fetching cards failed: ", error);
+    }
+  };
 
-	const onSave = async (id, updateCard) => {
-		try {
-			const response = await axios.patch(`${url}/flashcard/${id}`, {
-				newQuestion: updateCard.question,
-				newAnswer: updateCard.answer,
-				newLevel: updateCard.level,
-				newTag: updateCard.tag,
-				newDeck: updateCard.deck,
-				newHint: updateCard.hint
-			})
+  const onDelete = async (id) => {
+    await axios
+      .delete(`${url}/flashcard/${id}`)
+      .then((response) => {
+        toast.success("Card deleted successfully");
+        console.log("card deleted: ", response);
+        fetchCards();
+        alert("card deleted");
+      })
+      .catch((err) => {
+        toast.error("Error deleting card");
+        console.error("error deleting card: ", err);
+      });
+  };
 
-			toast.success("card updated successfully")
-		} catch (error) {
-			toast.error("Error in updating card")
-			console.error("error while updating card: ", error);
-		}
-	}
+  const onSave = async (id, updateCard) => {
+    try {
+      const response = await axios.patch(`${url}/flashcard/${id}`, {
+        newQuestion: updateCard.question,
+        newAnswer: updateCard.answer,
+        newTag: updateCard.tag,
+        newDeck: updateCard.deck,
+        newHint: updateCard.hint,
+      });
 
-	const handleRefresh = async () => {
-		await fetchCards()
-	}
+      toast.success("card updated successfully");
+    } catch (error) {
+      toast.error("Error in updating card");
+      console.error("error while updating card: ", error);
+    }
+  };
 
-	return (
-		<div className='mx-auto max-w-7xl px-2 py-6'>
-			<div className='h-16'>
-				<div className="h-16 flex justify-between items-center px-2 gap-5">
-					<div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-						<div>
-							<h1 className="text-2xl font-bold text-slate-900">Deck - {deck}</h1>
-							<p className="text-sm text-slate-500">Total: {cards.length} Cards</p>
-						</div>
-					</div>
+  const handleRefresh = async () => {
+    await fetchCards();
+  };
 
-					<div className='flex justify-end items-center px-4 gap-5'>
-						<button onClick={handleRefresh}>
-							<RefreshCcwIcon />
-						</button>
-						<button
-							className="bg-green-500 text-white px-4 py-2 rounded-lg flex justify-center items-center hover:bg-green-600 transition"
-							onClick={() => setReview(true)}
-						>
-							<Repeat className='w-4 h-4 mr-2' />
-							Review
-						</button>
-					</div>
-				</div>
-			</div>
-			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-				{Array.isArray(cards) && cards.map((card) => (
-					<Flashcard
-						key={card._id}
-						card={card}
-						Click={() => {
-							setSelectedCard(card)
-							setShowCard(true)
-						}}
-						onDetail={() => {
-							setSelectedCard(card)
-							setDetail(true)
-						}}
-						onEdit={() => {
-							setSelectedCard(card)
-							setEdit(true)
-						}}
-						onDelete={() => onDelete(card._id)}
-					/>
-				))}
-			</div>
+  return (
+    <div className="mx-auto max-w-7xl px-2 py-6">
+      <div className="h-16">
+        <div className="h-16 flex justify-between items-center px-2 gap-5">
+          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-slate-900">
+                Deck - {deck}
+              </h1>
+              <p className="text-sm text-slate-500">
+                Total: {cards?.length} Cards
+              </p>
+            </div>
+          </div>
 
-			{detail &&
-				<DetailModal
-					flashcard={selectedCard}
-					open={detail}
-					onOpenChange={setDetail}
-				/>
-			}
+          <div className="flex justify-end items-center px-4 gap-5">
+            <button onClick={handleRefresh}>
+              <RefreshCcwIcon />
+            </button>
+            <button
+              className="bg-green-500 text-white px-4 py-2 rounded-lg flex justify-center items-center hover:bg-green-600 transition"
+              onClick={() => setReview(true)}
+            >
+              <Repeat className="w-4 h-4 mr-2" />
+              Review
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        {Array.isArray(cards) &&
+          cards.map((card) => (
+            <Flashcard
+              key={card._id}
+              card={card}
+              Click={() => {
+                setSelectedCard(card);
+                setShowCard(true);
+              }}
+              onDetail={() => {
+                setSelectedCard(card);
+                setDetail(true);
+              }}
+              onEdit={() => {
+                setSelectedCard(card);
+                setEdit(true);
+              }}
+              onDelete={() => onDelete(card._id)}
+            />
+          ))}
+      </div>
 
-			{edit &&
-				<EditModal
-					flashcard={selectedCard}
-					open={edit}
-					onOpenChange={setEdit}
-					onSave={onSave}
-				/>
-			}
+      {detail && (
+        <DetailModal
+          flashcard={selectedCard}
+          open={detail}
+          onOpenChange={setDetail}
+        />
+      )}
 
-			{showCard &&
-				<ReviewCard 
-					flashcard={selectedCard}
-					onOpenChange={setShowCard}
-					refresh={handleRefresh}
-				/>
-			}
+      {edit && (
+        <EditModal
+          flashcard={selectedCard}
+          open={edit}
+          onOpenChange={setEdit}
+          onSave={onSave}
+        />
+      )}
 
-			{review &&
-				<ReviewAllCard
-					cards={cards}
-					onOpenChange={setReview}
-					refresh={handleRefresh}
-				/>
-			}
+      {showCard && (
+        <ReviewCard
+          flashcard={selectedCard}
+          onOpenChange={setShowCard}
+          refresh={handleRefresh}
+        />
+      )}
 
-		</div>
-	)
+      {review && (
+        <ReviewAllCard
+          cards={cards}
+          onOpenChange={setReview}
+          refresh={handleRefresh}
+        />
+      )}
+    </div>
+  );
 }
 
-export default DeckCards
+export default DeckCards;

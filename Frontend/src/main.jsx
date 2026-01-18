@@ -25,7 +25,7 @@ const router = createBrowserRouter(
         <Route path='/all-cards' element={<AllCards/>}/>
         <Route path='/pending-cards' element={<PendingCards/>}/>
         <Route path='/my-decks' element={<MyDecks/>}/>
-        <Route path='/my-decks/:deck' element={<DeckCards/>}/>
+        <Route path='/my-decks/:deckId' element={<DeckCards/>}/>
       </Route>
       <Route path='/login' element={<Login/>}/>
       <Route path='/signup' element={<Signup/>}/>

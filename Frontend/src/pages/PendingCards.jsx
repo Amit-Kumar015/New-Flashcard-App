@@ -81,7 +81,7 @@ function PendingCards() {
   };
 
   const onDelete = async (id) => {
-    axios
+    await axios
       .delete(`${url}/flashcard/${id}`)
       .then((response) => {
         toast.success("Card deleted successfully");
