@@ -113,7 +113,8 @@ const getAllCards = catchAsync(async (req, res, next) => {
                 hint: 1,
                 deck: '$deckInfo.name',
                 reviewDate: 1,
-                createdAt: 1
+                createdAt: 1,
+                updatedAt: 1
             }
         }
     ])

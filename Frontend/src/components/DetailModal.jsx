@@ -1,40 +1,39 @@
-import { X, Calendar, BookOpen, Tag, TrendingUp } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { Button } from "@/components/ui/button"
-import { useEffect } from "react"
+import { X, Calendar, BookOpen, Tag, TrendingUp } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
 
 export function DetailModal({ flashcard, open, onOpenChange }) {
   useEffect(() => {
     console.log(flashcard);
-    
+
     if (open) {
-      document.body.style.overflow = "hidden"
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = ""
+      document.body.style.overflow = "";
     }
 
     return () => {
-      document.body.style.overflow = ""
-    }
-  }, [open])
-  if (!flashcard || !open) return null
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+  if (!flashcard || !open) return null;
 
   const formatDate = (dateString) => {
     console.log(dateString);
-    
+
     return new Date(dateString).toLocaleDateString("en-IN", {
       year: "numeric",
       month: "long",
       day: "numeric",
-    })
-  }
+    });
+  };
 
   return (
     <div className="fixed inset-0 flex backdrop-blur-xs items-center justify-center z-30">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
-        
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-2xl font-bold">Flashcard Details</h2>
@@ -61,11 +60,15 @@ export function DetailModal({ flashcard, open, onOpenChange }) {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h4 className="font-semibold text-sm text-muted-foreground mb-2">QUESTION</h4>
+              <h4 className="font-semibold text-sm text-muted-foreground mb-2">
+                QUESTION
+              </h4>
               <p className="text-lg">{flashcard.question}</p>
             </div>
             <div>
-              <h4 className="font-semibold text-sm text-muted-foreground mb-2">ANSWER</h4>
+              <h4 className="font-semibold text-sm text-muted-foreground mb-2">
+                ANSWER
+              </h4>
               <p className="text-lg">{flashcard.answer}</p>
             </div>
           </CardContent>
@@ -107,12 +110,30 @@ export function DetailModal({ flashcard, open, onOpenChange }) {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <Calendar className="w-4 h-4 text-blue-700" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">last Review</p>
+                  <p className="font-medium">
+                    {formatDate(flashcard.updatedAt)}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-3">
                 <div className="p-2 bg-orange-100 rounded-lg">
                   <Calendar className="w-4 h-4 text-orange-600" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Next Review</p>
-                  <p className="font-medium">{formatDate(flashcard.reviewDate)}</p>
+                  <p className="font-medium">
+                    {formatDate(flashcard.reviewDate)}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -127,6 +148,5 @@ export function DetailModal({ flashcard, open, onOpenChange }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
-
