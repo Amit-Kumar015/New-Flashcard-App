@@ -12,8 +12,6 @@ function ReviewCard({ flashcard, onOpenChange, refresh }) {
     const id = flashcard._id;
 
     try {
-      console.log(difficulty, id);
-
       await axios.patch(`${url}/flashcard/actions/review`, null, {
         params: {
           difficulty,

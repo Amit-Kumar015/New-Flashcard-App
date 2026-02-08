@@ -7,8 +7,6 @@ import { useEffect } from "react";
 
 export function DetailModal({ flashcard, open, onOpenChange }) {
   useEffect(() => {
-    console.log(flashcard);
-
     if (open) {
       document.body.style.overflow = "hidden";
     } else {
@@ -22,8 +20,6 @@ export function DetailModal({ flashcard, open, onOpenChange }) {
   if (!flashcard || !open) return null;
 
   const formatDate = (dateString) => {
-    console.log(dateString);
-
     return new Date(dateString).toLocaleDateString("en-IN", {
       year: "numeric",
       month: "long",

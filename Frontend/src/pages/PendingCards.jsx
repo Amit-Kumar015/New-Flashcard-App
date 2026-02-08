@@ -36,9 +36,7 @@ function PendingCards() {
 
   const getTag = async () => {
     try {
-      const response = await axios.get(`${url}/flashcard/tag`);
-      console.log(response.data.data);
-      
+      const response = await axios.get(`${url}/flashcard/tag`);      
       settag(response.data.data);
     } catch (error) {
       toast.error(error.response?.data?.error || "Fetching tags failed");
@@ -47,9 +45,7 @@ function PendingCards() {
 
   const getDecks = async () => {
     try {
-      const response = await axios.get(`${url}/flashcard/decks`);
-      console.log(response.data.data[0]?.decks);
-      
+      const response = await axios.get(`${url}/flashcard/decks`);      
       setDeck(response.data.data[0]?.decks);
     } catch (error) {
       toast.error(error.response?.data?.error || "Fetching decks failed");
@@ -59,9 +55,7 @@ function PendingCards() {
   const fetchCards = async () => {
     try {
       const response = await axios.get(`${url}/flashcard/pending`);
-      setCards(response.data?.data);
-      console.log(response.data?.data);
-      
+      setCards(response.data?.data);      
     } catch (error) {
       toast.error(error.response?.data?.error || "Fetching cards failed");
     }

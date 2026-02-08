@@ -20,9 +20,7 @@ function MyDecks() {
 
   const fetchDecks = async () => {
     try {
-      const response = await axios.get(`${url}/flashcard/decks`)
-      console.log(response.data.data[0].decks);
-      
+      const response = await axios.get(`${url}/flashcard/decks`)      
       setDecks(response?.data?.data[0]?.decks)
     } catch (error) {
       toast.error("Error in fetching decks")

@@ -60,9 +60,7 @@ function AllCards() {
 
   const fetchCards = async () => {
     try {
-      const response = await axios.get(`${url}/flashcard`)
-      console.log(response);
-      
+      const response = await axios.get(`${url}/flashcard`)      
       setCards(response?.data?.data)
     }
     catch (error) {

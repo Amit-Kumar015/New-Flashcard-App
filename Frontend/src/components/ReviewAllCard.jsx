@@ -41,7 +41,6 @@ export default function ReviewAllCard({ cards, onOpenChange, refresh }) {
           id,
         },
       });
-      console.log("reviewed card")      
 
       if (index < count - 1) {
         setIndex((i) => i + 1);

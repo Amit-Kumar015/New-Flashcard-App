@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import axios from "axios";
 import { cn } from "@/lib/utils";
-import { AddDeckProvider } from "./context/addDeckContext";
+import { AddDeckProvider } from "./context/AddDeckContext";
 import { useSelector } from "react-redux";
 
 function App() {
@@ -37,9 +37,7 @@ function App() {
   const location = useLocation();
   const token = localStorage.getItem("userToken");
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`; 
-  const isLoggedIn = useSelector((state) => state.auth.status) 
-  console.log(isLoggedIn);
-  
+  const isLoggedIn = useSelector((state) => state.auth.status)   
 
   useEffect(() => {
     if(!isLoggedIn) navigate("/signup")
