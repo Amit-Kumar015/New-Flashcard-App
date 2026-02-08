@@ -61,7 +61,7 @@ function Login() {
   }
   
   return (
-    <div className="fixed inset-0 bg-black flex items-center justify-center ">
+    <div className="fixed inset-0 bg-black flex flex-col items-center justify-center ">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl text-center font-bold mb-4">Login</h2>
         <form onSubmit={handleSubmit}>
@@ -89,7 +89,7 @@ function Login() {
           </label>
           <button 
             type='submit'
-            className="w-full bg-blue-600 text-white p-2 rounded"
+            className="w-full bg-blue-600 text-white p-2 rounded cursor-pointer"
             disabled={loading}
           >
             {loading ? "Logging In..." : "Login"}
@@ -98,7 +98,9 @@ function Login() {
 
         {errorMessage.length != 0 && <p className='text-center text-lg mt-3 font-semibold text-red-500'>{errorMessage}</p>}
       </div>
-      
+      <div className='mt-3 text-center text-white'>Don’t have an account? 
+        <span className='text-blue-500 cursor-pointer' onClick={() => navigate("/signup")}>{" "}Sign up</span>
+      </div>
     </div>
   )
 }

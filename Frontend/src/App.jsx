@@ -38,9 +38,11 @@ function App() {
   const token = localStorage.getItem("userToken");
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`; 
   const isLoggedIn = useSelector((state) => state.auth.status) 
+  console.log(isLoggedIn);
+  
 
   useEffect(() => {
-    if(!isLoggedIn) navigate("/")
+    if(!isLoggedIn) navigate("/signup")
   }, [isLoggedIn, navigate])
 
   return (

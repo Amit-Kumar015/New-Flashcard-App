@@ -62,8 +62,8 @@ function Signup() {
 	}
 
 	return (
-		<div className="fixed inset-0 bg-black flex items-center justify-center ">
-			<div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+		<div className="fixed inset-0 bg-black flex flex-col items-center justify-center ">
+			<div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
 				<h2 className="text-2xl text-center font-bold mb-4">Sign Up</h2>
 				<form onSubmit={handleSubmit}>
 					<label>
@@ -110,7 +110,9 @@ function Signup() {
 
 				{errorMessage.length != 0 && <p className='text-center text-lg mt-3 font-semibold text-red-500'>{errorMessage}</p>}
 			</div>
-
+      <div className='mt-3 text-center text-white'>Already have an account? 
+        <span className='text-blue-500 cursor-pointer' onClick={() => navigate("/login")}>{" "}Log in</span>
+      </div>
 		</div>
 	)
 }

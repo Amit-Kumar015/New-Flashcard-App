@@ -69,11 +69,9 @@ export default function Flashcard({ card, Click, onDetail, onEdit, onDelete }) {
         </DropdownMenu>
       </div>
 
-      <CardContent className="flex h-full p-6">
-        <p className="w-full mt-4 text-center text-lg font-medium text-gray-800 leading-relaxed whitespace-normal overflow-hidden">
-          {card.question.length > MAX
-            ? `${card.question.slice(0, 50)}...`
-            : card.question}
+      <CardContent className="h-full p-6">
+        <p className="mt-4 text-center text-lg font-medium text-gray-800 leading-relaxed overflow-hidden line-clamp-2">
+          {card.question}
         </p>
       </CardContent>
     </Card>
