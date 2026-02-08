@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { Home, NotebookText, Repeat, Layers, Bug } from "lucide-react";
@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import axios from "axios";
 import { cn } from "@/lib/utils";
 import { AddDeckProvider } from "./context/addDeckContext";
+import { useSelector } from "react-redux";
 
 function App() {
   const navItems = [
@@ -35,7 +36,12 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const token = localStorage.getItem("userToken");
-  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;  
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`; 
+  const isLoggedIn = useSelector((state) => state.auth.status) 
+
+  useEffect(() => {
+    if(!isLoggedIn) navigate("/")
+  }, [isLoggedIn, navigate])
 
   return (
     <AddDeckProvider>
