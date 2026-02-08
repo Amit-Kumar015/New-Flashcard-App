@@ -13,7 +13,7 @@ function DeckCards() {
   const url = import.meta.env.VITE_API_URL;
   const [cards, setCards] = useState([]);
   const [edit, setEdit] = useState(false);
-  const [deck, setDeck] = useState(null)
+  const [deck, setDeck] = useState(null);
   const [detail, setDetail] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [showCard, setShowCard] = useState(false);
@@ -28,11 +28,8 @@ function DeckCards() {
   const fetchCards = async () => {
     try {
       const response = await axios.get(`${url}/flashcard/decks/${deckId}`);
-      console.log(response?.data?.data[0].cards);
-      console.log(response?.data?.data[0].deck);
-
       setCards(response?.data?.data[0].cards);
-	  setDeck(response?.data?.data[0].deck)
+      setDeck(response?.data?.data[0].deck);
     } catch (error) {
       toast.error(error.response?.data?.error || "Fetching cards failed");
       console.error("Fetching cards failed: ", error);

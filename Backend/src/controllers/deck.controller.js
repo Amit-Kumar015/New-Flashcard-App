@@ -161,7 +161,7 @@ const searchDeck = catchAsync(async (req, res, next) => {
   // sort by recently updated
 
   const query = req.query.search;
-
+  
   if (!query || query.trim().length === 0) {
     return next(new AppError("Search query missing", 404));
   }
@@ -174,9 +174,9 @@ const searchDeck = catchAsync(async (req, res, next) => {
     name: { $regex: regex },
   })
     .sort({ updatedAt: -1 })
-    .select("_id name visible user createdAt updatedAt");
+    .select("_id name visible user cards")
 
-  return sendResponse(res, 200, "Fetched decks successfully", {
+  return sendResponse(res, 200, "Fetched searched decks successfully", {
     total: decks.length,
     decks,
   });
@@ -190,6 +190,7 @@ const addPublicDeckToUser = catchAsync(async (req, res, next) => {
   // add deck reference to user deck
 
   const { deckId } = req.params;
+console.log(deckId);
 
   if (!deckId || !isValidObjectId(deckId)) {
     return next(new AppError("provide valid deck id", 400));

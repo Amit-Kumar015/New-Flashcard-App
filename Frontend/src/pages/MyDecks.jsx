@@ -4,21 +4,24 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { getDeckIcon } from "@/lib/deckIcons"
 import { toast } from "react-toastify"
+import { useContext } from "react"
+import { AddDeckContext } from "@/context/addDeckContext"
 
 function MyDecks() {
   const url = import.meta.env.VITE_API_URL
   const [decks, setDecks] = useState([])
+  const {isAdded} = useContext(AddDeckContext)
 
   const navigate = useNavigate()
 
   useEffect(() => {
     fetchDecks()
-  }, [])
+  }, [isAdded])
 
   const fetchDecks = async () => {
     try {
       const response = await axios.get(`${url}/flashcard/decks`)
-      console.log(response.data.data[0].decks.length);
+      console.log(response.data.data[0].decks);
       
       setDecks(response?.data?.data[0]?.decks)
     } catch (error) {
@@ -44,8 +47,8 @@ function MyDecks() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="mx-auto max-w-7xl px-4 py-5 md:px-8">
+    <div className="w-full min-h-screen p-3 bg-slate-50">
+      {/* <div className="mx-auto max-w-7xl px-4 py-5 md:px-8"> */}
         <div className="flex gap-6">
 
           <section className="flex-1">
@@ -70,7 +73,7 @@ function MyDecks() {
             </div>
           </section>
         </div>
-      </div>
+      {/* </div> */}
     </div>
   )
 }

@@ -14,14 +14,14 @@ export default function Flashcard({ card, Click, onDetail, onEdit, onDelete }) {
 
   return (
     <Card
-      className="w-full h-48 relative hover:shadow-lg transition-shadow duration-200"
+      className="w-full h-48 relative hover:shadow-md cursor-pointer"
       onClick={Click}
     >
       <div className="absolute top-4 left-4 z-10 ">
         {card.tag && (
           <Badge
             variant="secondary"
-            className="bg-green-100 text-green-800 hover:bg-green-200 ml-2"
+            className="bg-green-100 text-green-800 ml-2"
           >
             {card.tag}
           </Badge>
