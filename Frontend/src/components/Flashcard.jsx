@@ -12,13 +12,15 @@ import {
 export default function Flashcard({ card, Click, onDetail, onEdit, onDelete }) {
   const MAX = 50
 
+  if (!card) return null;
+
   return (
     <Card
       className="w-full h-48 relative hover:shadow-md cursor-pointer"
       onClick={Click}
     >
       <div className="absolute top-4 left-4 z-10 ">
-        {card.tag && (
+        {card.tag?.length > 0 && (
           <Badge
             variant="secondary"
             className="bg-green-100 text-green-800 ml-2"
@@ -71,7 +73,7 @@ export default function Flashcard({ card, Click, onDetail, onEdit, onDelete }) {
 
       <CardContent className="h-full p-6">
         <p className="mt-4 text-center text-lg font-medium text-gray-800 leading-relaxed overflow-hidden line-clamp-2">
-          {card.question}
+          {card.question ?? ""}
         </p>
       </CardContent>
     </Card>

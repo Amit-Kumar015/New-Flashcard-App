@@ -125,7 +125,7 @@ export default function Home() {
               Welcome!
             </h1>
             <p className="text-lg text-gray-600">
-              You have **{pendingCards.length} cards** waiting for your
+              You have **{pendingCards?.length || 0} cards** waiting for your
               attention today.
             </p>
           </div>
@@ -136,7 +136,7 @@ export default function Home() {
             onClick={() => navigate("/pending-cards")}
           >
             <Zap className="w-5 h-5 mr-2" />
-            Start Review Session ({pendingCards.length})
+            Start Review Session ({pendingCards?.length || 0})
           </Button>
         </div>
       </Card>
@@ -154,7 +154,7 @@ export default function Home() {
             <Database className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{cards.length}</div>
+            <div className="text-2xl font-bold">{cards?.length || 0}</div>
             <p className="text-xs text-muted-foreground">in all decks</p>
           </CardContent>
         </Card>
@@ -167,7 +167,7 @@ export default function Home() {
             <Zap className="h-4 w-4 text-yellow-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{pendingCards.length}</div>
+            <div className="text-2xl font-bold">{pendingCards?.length || 0}</div>
             <p className="text-xs text-muted-foreground">
               Ready for spaced repetition
             </p>
@@ -182,7 +182,7 @@ export default function Home() {
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{decks.length}</div>
+            <div className="text-2xl font-bold">{decks?.length || 0}</div>
             <p className="text-xs text-muted-foreground">Start a new topic!</p>
           </CardContent>
         </Card>
@@ -192,7 +192,7 @@ export default function Home() {
         <Card className="col-span-1 shadow-lg lg:col-span-3">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-xl">
-              All Decks ({decks.length})
+              All Decks ({decks?.length || 0})
             </CardTitle>
           </CardHeader>
 
@@ -201,7 +201,7 @@ export default function Home() {
               className="flex w-full overflow-x-auto pb-4 whitespace-nowrap cursor-pointer"
               style={{ scrollbarWidth: "none" }}
             >
-              {decks.length > 0 ? (
+              {decks?.length > 0 ? (
                 decks.map((d) => (
                   <Deck
                     key={d._id}

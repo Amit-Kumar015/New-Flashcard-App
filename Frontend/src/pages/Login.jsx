@@ -35,10 +35,10 @@ function Login() {
         password: formData.password
       })
 
-      localStorage.setItem("userToken", response.data?.token)
+      localStorage.setItem("userToken", response?.data?.token)
       dispatch(login({
         userData: {
-          token: response.data?.token
+          token: response?.data?.token
         }
       }))
       navigate('/')
@@ -48,7 +48,7 @@ function Login() {
       
       if(error.response){
         console.log('Status:', error.response.status);   
-        console.log('Message:', error.response.data.error);    
+        console.log('Message:', error.response?.data?.error);    
       }
       else if(error.request){
         console.log('No response received:', error.request);
@@ -96,7 +96,7 @@ function Login() {
           </button>
         </form>
 
-        {errorMessage.length != 0 && <p className='text-center text-lg mt-3 font-semibold text-red-500'>{errorMessage}</p>}
+        {errorMessage?.length !== 0 && <p className='text-center text-lg mt-3 font-semibold text-red-500'>{errorMessage}</p>}
       </div>
       <div className='mt-3 text-center text-white'>Don’t have an account? 
         <span className='text-blue-500 cursor-pointer' onClick={() => navigate("/signup")}>{" "}Sign up</span>

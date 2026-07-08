@@ -30,7 +30,7 @@ export function PracticeCard({ flashcard, onAnswer }) {
                 </Badge>
             )}
             </div>
-            {flashcard.tag && flashcard.tag.length > 0 && (
+            {flashcard.tag?.length > 0 && (
             <div className="flex gap-1">
                 <Badge variant="secondary" className="text-xs">
                     {flashcard.tag}

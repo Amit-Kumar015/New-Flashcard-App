@@ -31,7 +31,7 @@ function AllCards() {
       const getTag = async () => {
         const response = await axios.get(`${url}/flashcard/tag`)
 
-        settag(response.data?.allTag)
+        settag(response?.data?.allTag)
       }
       getTag()
     } catch (error) {
@@ -45,7 +45,7 @@ function AllCards() {
       const getDecks = async () => {
         const response = await axios.get(`${url}/flashcard/decks`)
 
-        setDeck(response.data?.allDecks)
+        setDeck(response?.data?.allDecks)
       }
       getDecks()
     } catch (error) {
@@ -81,7 +81,7 @@ function AllCards() {
         }
       })
 
-      setCards(response.data?.cards)
+      setCards(response?.data?.cards)
     } catch (error) {
       toast.error(error.response?.data?.error || "failed to filter cards")
        console.error("failed to filter cards: ", error);

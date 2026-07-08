@@ -28,8 +28,8 @@ function DeckCards() {
   const fetchCards = async () => {
     try {
       const response = await axios.get(`${url}/flashcard/decks/${deckId}`);
-      setCards(response?.data?.data[0].cards);
-      setDeck(response?.data?.data[0].deck);
+      setCards(response?.data?.data?.[0]?.cards);
+      setDeck(response?.data?.data?.[0]?.deck);
     } catch (error) {
       toast.error(error.response?.data?.error || "Fetching cards failed");
       console.error("Fetching cards failed: ", error);
@@ -82,7 +82,7 @@ function DeckCards() {
                 Deck - {deck}
               </h1>
               <p className="text-sm text-slate-500">
-                Total: {cards?.length} Cards
+                Total: {cards?.length ?? 0} Cards
               </p>
             </div>
           </div>

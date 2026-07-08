@@ -21,7 +21,7 @@ function MyDecks() {
   const fetchDecks = async () => {
     try {
       const response = await axios.get(`${url}/flashcard/decks`)      
-      setDecks(response?.data?.data[0]?.decks)
+      setDecks(response?.data?.data?.[0]?.decks)
     } catch (error) {
       toast.error("Error in fetching decks")
       console.error('Error in fetching decks: ', error);
@@ -53,7 +53,7 @@ function MyDecks() {
             <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex flex-col gap-2">
                 <h1 className="text-2xl font-bold text-slate-900">My Decks</h1>
-                <p className="text-sm text-slate-500">Total: {decks.length} Decks</p>
+                <p className="text-sm text-slate-500">Total: {decks?.length ?? 0} Decks</p>
               </div>
             </div>
 

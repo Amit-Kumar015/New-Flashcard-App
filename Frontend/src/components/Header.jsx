@@ -101,7 +101,7 @@ const Header = () => {
           onChange={(e) => setQuery(e.target.value)}
           className="w-70"
         />
-        {query.length > 0 && (
+        {query?.length > 0 && (
           <>
             {searchLoading && (
               <div className="mt-3 fixed flex justify-center max-h-50 w-70 z-10">
@@ -109,7 +109,7 @@ const Header = () => {
               </div>
             )}
 
-            {!searchLoading && searchResults.length > 0 && (
+            {!searchLoading && searchResults?.length > 0 && (
               <ul className="z-10 fixed mt-1 flex flex-col max-h-50 w-70 overflow-y-auto custom-scrollbar">
                 {searchResults?.map((deck) => (
                   <div className="w-full flex items-center gap-2">
@@ -119,7 +119,7 @@ const Header = () => {
                     >
                       {deck.name}
                       <span className="px-2 py-1 rounded-lg bg-amber-100 text-xs">
-                        {deck.cards.length} Cards
+                        {deck.cards?.length ?? 0} Cards
                       </span>
                     </li>
                     <Button
@@ -134,7 +134,7 @@ const Header = () => {
               </ul>
             )}
 
-            {!searchLoading && searchResults.length === 0 && (
+            {!searchLoading && searchResults?.length === 0 && (
               <div className="w-70 rounded-md text-center mt-3 fixed bg-gray-100/90 z-10">
                 No decks found
               </div>
